@@ -44,9 +44,14 @@ export default function AcademicPapersView() {
         </div>
         <ul>
           {sortedPapers.map((paper, idx) => (
-            <li key={idx} className="mb-4 p-4 bg-blue-50 rounded shadow-sm">
-              <div className="text-lg font-semibold text-blue-800">{paper.name}</div>
-              <div className="text-sm text-blue-600">Author: {paper.author}</div>
+            <li key={idx} className="mb-4">
+              <a
+                href="/views.dante/textview"
+                className="block p-4 bg-blue-50 rounded shadow-sm transition hover:bg-blue-100 cursor-pointer border border-blue-200 hover:border-blue-400"
+              >
+                <div className="text-lg font-semibold text-blue-800">{paper.name}</div>
+                <div className="text-sm text-blue-600">Author: {paper.author}</div>
+              </a>
             </li>
           ))}
         </ul>
