@@ -1,4 +1,4 @@
-// Global type definitions examples - adjust later
+// Global type definitions for Papr application
 
 export interface User {
   id: string
@@ -27,3 +27,12 @@ export interface BaseComponentProps {
   className?: string
   children?: React.ReactNode
 }
+
+// Export search-related types
+export type {
+  Tldr,
+  Paper,
+  SearchFilters,
+  SearchResult,
+  SearchState
+} from './search';
