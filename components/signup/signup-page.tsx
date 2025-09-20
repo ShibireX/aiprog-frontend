@@ -11,8 +11,6 @@ export function SignUpView() {
     <div
       className={cn(
         'group rounded-3xl border-0 bg-white/40 p-8 shadow-lg backdrop-blur-sm',
-        '',
-        '',
         'mx-auto max-w-md',
         'mt-48'
       )}
