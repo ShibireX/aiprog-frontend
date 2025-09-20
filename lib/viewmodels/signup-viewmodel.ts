@@ -2,6 +2,9 @@
 
 import { useState, useRef } from 'react';
 import { SignUpState } from '@/types/signup';
+import { graphqlClient } from '@/lib/graphql/client';
+import { REGISTER_USER } from '../graphql/queries';
+
 export class SignUpViewModel {
   private state: SignUpState;
   private setState: (state: SignUpState) => void;
@@ -12,7 +15,7 @@ export class SignUpViewModel {
   }
 
   // Getters
-  get username(){return this.state.username;}
+  get username() { return this.state.username; }
   get email() { return this.state.email; }
   get password() { return this.state.password; }
   get repeatPassword() { return this.state.repeatPassword; }
@@ -26,39 +29,63 @@ export class SignUpViewModel {
   setRepeatPassword = (repeatPassword: string) => this.updateState({ repeatPassword });
 
   onSubmit = async () => {
-    if (!this.state.email || !this.state.password || !this.state.repeatPassword) {
-      this.updateState({ errorMessage: "All fields are required" });
-      return;
-    }
-    if (this.state.password !== this.state.repeatPassword) {
-      this.updateState({ errorMessage: "Passwords do not match" });
-      return;
-    }
+    this.updateState({ isSubmitting: true, errorMessage: "" });
 
-    this.updateState({ isSubmitting: true, errorMessage: undefined });
+    try {
+      const result = await this.registerUserAPI(this.username, this.email, this.password);
 
+      console.log(" Registered user:", result.user);
+
+      // store token if you want
+      graphqlClient.setAuthToken?.(result.token);
+
+      this.updateState({ isSubmitting: false });
+    } catch (err: any) {
+      this.updateState({
+        isSubmitting: false,
+        errorMessage: err.message || "Signup failed",
+      });
+    }
   };
 
-  private updateState = (partial: Partial<typeof this.state>) => {
+  private registerUserAPI = async (username: string, email: string, password: string) => {
+    const response = await graphqlClient.request<{
+      register: {
+        token: string;
+        user: {
+          id: string;
+          email: string;
+          username: string;
+          createdAt: string;
+          updatedAt: string;
+        };
+      };
+    }>({
+          query: REGISTER_USER,
+        });
+
+    return response.register;
+  };
+
+  private updateState = (partial: Partial<SignUpState>) => {
     this.state = { ...this.state, ...partial };
     this.setState(this.state);
   };
 }
 
-
-
-
-
+// Hook for React
 export function useSignUpViewModel() {
-    const [state, setState] = useState<SignUpState>({
-        username:'',
-        email: '',
-        password: '',
-        repeatPassword: '',
-        isSubmitting: false,
-        errorMessage: '',
-    });
+  const [state, setState] = useState<SignUpState>({
+    username: '',
+    email: '',
+    password: '',
+    repeatPassword: '',
+    isSubmitting: false,
+    errorMessage: '',
+  });
+
   const viewModel = useRef(new SignUpViewModel(state, setState));
   viewModel.current = new SignUpViewModel(state, setState);
+
   return viewModel.current;
 }

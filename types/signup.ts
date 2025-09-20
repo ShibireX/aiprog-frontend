@@ -7,7 +7,7 @@ export interface SignUpState {
     errorMessage?: string |null;
 }
 
-export interface SignUpSent {
+export interface SignUpResult {
     username:string;
     email:string;
     password:string;
