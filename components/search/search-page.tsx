@@ -23,7 +23,6 @@ export function SearchPage() {
       <div className="relative">
       <div className="flex justify-end place-items-end px-4 flex-row p-4">
       <Button description="Sign up" link="/signup" />
-      <Button description="Login" link="/login" />
       </div>
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">

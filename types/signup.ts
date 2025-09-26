@@ -1,3 +1,5 @@
+import { User } from ".";
+
 export interface SignUpState {
     username:string;
     email: string;
@@ -7,9 +9,8 @@ export interface SignUpState {
     errorMessage?: string |null;
 }
 
-export interface SignUpResult {
-    username:string;
-    email:string;
-    password:string;
-
+export interface RegisterResponse {
+    token: string;
+    user: User;
 }
+
