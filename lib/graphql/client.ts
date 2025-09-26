@@ -1,5 +1,3 @@
-// GraphQL client configuration
-// This will be implemented when the backend GraphQL endpoint is ready
 
 interface GraphQLResponse<T> {
   data?: T;

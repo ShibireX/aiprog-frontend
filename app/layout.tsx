@@ -6,8 +6,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Papr - AI-Powered Scientific Publication Search',
-  description: 'Discover and explore scientific publications with the power of AI. Search, analyze, and connect research papers like never before.',
+  title: 'Papr',
+  description: 'Discover and reference scientific publications with the power of AI. Search, store, and reference research papers like never before.',
 }
 
 export default function RootLayout({

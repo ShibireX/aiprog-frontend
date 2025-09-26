@@ -25,6 +25,15 @@ export interface SearchResult {
   next?: number;
 }
 
+export interface SavedPaper {
+  id: string;
+  userId: string;
+  paperId: string;
+  paper: Paper;
+  notes: string;
+  tags: string[];
+  createdAt: string;
+}
 export interface SearchFilters {
   limit?: number;
   offset?: number;
@@ -36,4 +45,6 @@ export interface SearchState {
   results: SearchResult | null;
   isLoading: boolean;
   error: string | null;
+  savedPapers: Set<string>; // Track saved paper IDs
+  savingPapers: Set<string>; // Track papers currently being saved
 }

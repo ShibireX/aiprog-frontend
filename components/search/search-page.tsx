@@ -5,24 +5,21 @@ import { InfoCard } from '@/components/ui/info-card'
 import { SearchResults } from '@/components/search/search-results'
 import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
 import { Button } from '@/components/ui/button'
+import { UserAvatar } from '@/components/ui/user-avatar'
+
 export function SearchPage() {
   const searchViewModel = useSearchViewModel()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
-      {/* Background Pattern */}
-      <div
-        className="absolute inset-0 opacity-40"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      >
-
-      </div>
       {/* Header Section */}
       <div className="relative">
       <div className="flex justify-end place-items-end px-4 flex-row p-4">
-      <Button description="Sign up" link="/signup" />
+        {searchViewModel.auth.isAuthenticated ? (
+          <UserAvatar />
+        ) : (
+          <Button description="Sign up" link="/signup" />
+        )}
       </div>
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
@@ -33,7 +30,7 @@ export function SearchPage() {
               <div className="mx-auto h-1 w-24 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600"></div>
             </div>
             <p className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700">
-              Discover and explore scientific publications with ease
+              Discover and reference scientific publications with ease
             </p>
           </div>
 
@@ -139,7 +136,7 @@ export function SearchPage() {
             </div>
           </div>
         ) : searchViewModel.results ? (
-          <SearchResults results={searchViewModel.results} />
+          <SearchResults results={searchViewModel.results} searchViewModel={searchViewModel} />
         ) : null}
       </div>
     </div>
