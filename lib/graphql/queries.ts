@@ -33,6 +33,34 @@ export const SEARCH_PAPERS = `
   }
 `;
 
+export const SAVE_PAPER = `
+  mutation SavePaper($input: SavePaperInput!) {
+    savePaper(input: $input) {
+      id
+      userId
+      paperId
+      paper {
+        id
+        semanticScholarId
+        title
+        authors
+        abstract
+        year
+        venue
+        url
+        citationCount
+        tldr {
+          model
+          text
+        }
+      }
+      notes
+      tags
+      createdAt
+    }
+  }
+`;
+
 export const REGISTER_USER = `
   mutation Register($input: RegisterInput!) {
     register(input: $input) {
@@ -44,6 +72,61 @@ export const REGISTER_USER = `
         createdAt
         updatedAt
       }
+    }
+  }
+`;
+
+export const LOGIN_USER = `
+  mutation Login($input: LoginInput!) {
+    login(input: $input) {
+      token
+      user {
+        id
+        email
+        username
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const GET_CURRENT_USER = `
+  query GetCurrentUser {
+    me {
+      id
+      email
+      username
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_SAVED_PAPERS = `
+  query GetSavedPapers($limit: Int = 10, $offset: Int = 0) {
+    getSavedPapers(limit: $limit, offset: $offset) {
+      id
+      userId
+      paperId
+      paper {
+        id
+        semanticScholarId
+        title
+        authors
+        abstract
+        year
+        venue
+        url
+        citationCount
+        tldr {
+          model
+          text
+        }
+      }
+      notes
+      tags
+      createdAt
     }
   }
 `;

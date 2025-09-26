@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import type { SearchResult, Paper } from '@/types/search';
+import type { SearchViewModel } from '@/lib/viewmodels/search-viewmodel';
 import { cn } from '@/lib/utils';
+import { Bookmark, BookmarkCheck, Loader } from 'lucide-react';
 
 interface SearchResultsProps {
   results: SearchResult;
+  searchViewModel: SearchViewModel;
   onPaperClick?: (paper: Paper) => void;
 }
 
-export function SearchResults({ results, onPaperClick }: SearchResultsProps) {
+export function SearchResults({ results, searchViewModel, onPaperClick }: SearchResultsProps) {
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
 
@@ -77,10 +80,34 @@ export function SearchResults({ results, onPaperClick }: SearchResultsProps) {
               transitionDelay: visibleCards.includes(index) ? '0ms' : `${index * 150}ms`
             }}
           >
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 group hover:shadow-xl hover:bg-white/90">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 group hover:shadow-xl hover:bg-white/90 relative">
+              {/* Save Button - Top Right */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  searchViewModel.savePaper(paper.id);
+                }}
+                disabled={searchViewModel.savedPapers.has(paper.id) || searchViewModel.savingPapers.has(paper.id)}
+                className={cn(
+                  "absolute top-4 right-4 z-10 p-2 rounded-full transition-all duration-200 shadow-md",
+                  searchViewModel.savedPapers.has(paper.id)
+                    ? "text-green-700 bg-green-100 border border-green-200"
+                    : "text-gray-600 hover:text-blue-600 bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-200"
+                )}
+                title={searchViewModel.savedPapers.has(paper.id) ? "Saved" : "Save paper"}
+              >
+                {searchViewModel.savingPapers.has(paper.id) ? (
+                  <Loader className="w-5 h-5 animate-spin" />
+                ) : searchViewModel.savedPapers.has(paper.id) ? (
+                  <BookmarkCheck className="w-5 h-5" />
+                ) : (
+                  <Bookmark className="w-5 h-5" />
+                )}
+              </button>
+
               <button
                 onClick={() => handlePaperClick(paper)}
-                className="w-full text-left p-6 hover:scale-[1.01] transition-all duration-300"
+                className="w-full text-left p-6 pr-16 hover:scale-[1.01] transition-all duration-300"
               >
                 <div className="space-y-4">
                   {/* Title */}
@@ -182,7 +209,7 @@ export function SearchResults({ results, onPaperClick }: SearchResultsProps) {
                           >
                             <span>Read full paper</span>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
                           </a>
                         </div>
