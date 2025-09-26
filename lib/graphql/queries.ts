@@ -32,6 +32,7 @@ export const SEARCH_PAPERS = `
     }
   }
 `;
+
 export const REGISTER_USER = `
   mutation Register($input: RegisterInput!) {
     register(input: $input) {
@@ -46,6 +47,9 @@ export const REGISTER_USER = `
     }
   }
 `;
+
+
+
 export const GET_PUBLICATION_DETAILS = `
   query GetPublicationDetails($id: ID!) {
     publication(id: $id) {

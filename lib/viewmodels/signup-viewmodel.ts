@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { SignUpState } from '@/types/signup';
+import { RegisterResponse, SignUpState } from '@/types/signup';
 import { graphqlClient } from '@/lib/graphql/client';
 import { REGISTER_USER } from '../graphql/queries';
+
 
 export class SignUpViewModel {
   private state: SignUpState;
@@ -28,13 +29,14 @@ export class SignUpViewModel {
   setPassword = (password: string) => this.updateState({ password });
   setRepeatPassword = (repeatPassword: string) => this.updateState({ repeatPassword });
 
+
+
   onSubmit = async () => {
     this.updateState({ isSubmitting: true, errorMessage: "" });
-
+    
     try {
       const result = await this.registerUserAPI(this.username, this.email, this.password);
 
-      console.log(" Registered user:", result.user);
 
       // store token if you want
       graphqlClient.setAuthToken?.(result.token);
@@ -48,24 +50,23 @@ export class SignUpViewModel {
     }
   };
 
-  private registerUserAPI = async (username: string, email: string, password: string) => {
-    const response = await graphqlClient.request<{
-      register: {
-        token: string;
-        user: {
-          id: string;
-          email: string;
-          username: string;
-          createdAt: string;
-          updatedAt: string;
-        };
-      };
-    }>({
-          query: REGISTER_USER,
-        });
 
+  private registerUserAPI = async (username: string, email: string, password: string): Promise<RegisterResponse> => {
+    const variables = { 
+     input:{
+      username: username,
+      email: email,
+      password: password
+    } 
+    }
+    
+    const response = await graphqlClient.request<{register: RegisterResponse}>({
+      query: REGISTER_USER,
+      variables
+    })
     return response.register;
-  };
+  }
+
 
   private updateState = (partial: Partial<SignUpState>) => {
     this.state = { ...this.state, ...partial };
