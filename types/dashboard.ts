@@ -4,6 +4,7 @@ export interface DashboardFilters {
   limit?: number;
   offset?: number;
   tags?: string[];
+  searchQuery?: string;
 }
 
 export interface DashboardState {

@@ -43,6 +43,23 @@ export class DashboardViewModel {
     return this.state.hasMore;
   }
 
+  // Derived
+  get filteredSavedPapers() {
+    const query = (this.state.filters.searchQuery || '').trim().toLowerCase();
+    if (!query) return this.state.savedPapers;
+    return this.state.savedPapers.filter(sp => {
+      const paper = sp.paper;
+      const searchableText = [
+        paper.title,
+        paper.authors.join(' '),
+        paper.abstract || '',
+        paper.venue || '',
+        paper.year?.toString() || ''
+      ].join(' ').toLowerCase();
+      return searchableText.includes(query);
+    });
+  }
+
   // Actions
   loadSavedPapers = async (refresh: boolean = false) => {
     // Check if user is authenticated
@@ -88,6 +105,10 @@ export class DashboardViewModel {
   setFilters = (filters: Partial<DashboardFilters>) => {
     const newFilters = { ...this.state.filters, ...filters };
     this.updateState({ filters: newFilters });
+  };
+
+  setSearchQuery = (searchQuery: string) => {
+    this.setFilters({ searchQuery });
   };
 
   clearError = () => {
