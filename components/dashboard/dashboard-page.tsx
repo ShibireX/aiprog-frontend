@@ -4,18 +4,18 @@ import { useAuthViewModel } from '@/lib/viewmodels/auth-viewmodel'
 import { useDashboardViewModel } from '@/lib/viewmodels/dashboard-viewmodel'
 import { useCitationViewModel } from '@/lib/viewmodels/citation-viewmodel'
 import { useRouter } from 'next/navigation'
-import { LogOut, RefreshCw, BookmarkCheck, FileText, X } from 'lucide-react'
+import {LogOut,RefreshCw,BookmarkCheck,FileText,X,ArrowLeft,} from 'lucide-react'
 import { CitationPopup } from '@/components/ui/citation-popup'
 import { UserAvatar } from '@/components/ui/user-avatar'
 import { PaperFolderIcon } from '@/components/ui/paper-folder'
 import { AddFolderIcon } from '@/components/ui/add-folder'
 import { SearchBar } from '../ui/search-bar'
 import { SearchResults } from '@/components/search/search-results'
-import { useEffect, useState } from 'react'
 import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { IconButton } from '../ui/icon-button'
 export function DashboardView() {
-  const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false)
   const authViewModel = useAuthViewModel()
   const dashboardViewModel = useDashboardViewModel()
   const citationViewModel = useCitationViewModel()
@@ -31,18 +31,6 @@ export function DashboardView() {
     citationViewModel.openPopup(dashboardViewModel.savedPapers)
   }
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsSearchOverlayOpen(false)
-      }
-    }
-    if (isSearchOverlayOpen) {
-      document.addEventListener('keydown', onKeyDown)
-    }
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [isSearchOverlayOpen])
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 p-4">
       {/* Background Pattern */}
@@ -52,8 +40,7 @@ export function DashboardView() {
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }}
       ></div>
-
-      <UserAvatar />
+      <IconButton link="/" className="relative z-10" />
       <div className="relative z-10 mx-auto w-full max-w-6xl">
         {/* Header */}
         <div className="mb-8 mt-12 text-center">
@@ -70,9 +57,22 @@ export function DashboardView() {
 
           <p className="text-gray-600">Manage your saved papers and research</p>
         </div>
+        {/* User Info & Actions */}
+        <div className="items-left justify-left  flex ">
+          <PaperFolderIcon text="All" />
+
+          <div className="flex gap-3">
+           {/*  <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout 
+            </button>*/}
+          </div>
+        </div>
         <div
           className="relative flex items-center justify-center py-4"
-          onClick={() => setIsSearchOverlayOpen(true)}
         >
           <div
             className="absolute left-0 top-1/2 flex -translate-y-1/2 items-center"
@@ -98,75 +98,15 @@ export function DashboardView() {
           </div>
 
           <SearchBar
-            value={searchViewModel.query}
-            onChange={searchViewModel.setQuery}
-            onSearch={searchViewModel.performSearch}
+            value={dashboardViewModel.filters.searchQuery || ''}
+            onChange={dashboardViewModel.setSearchQuery}
+            onSearch={() => {}}
             autoFocus
-            isLoading={searchViewModel.isLoading}
+            placeholder="Search a paper based on title"
+            isLoading={dashboardViewModel.isLoading}
           />
         </div>
-        {/* Search Overlay */}
-        {isSearchOverlayOpen && (
-          <div className="fixed inset-0 z-50">
-            <div
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-              onClick={() => setIsSearchOverlayOpen(false)}
-            />
-            <div className="relative z-10 mx-auto mt-20 w-full max-w-5xl px-4">
-              <div className="rounded-2xl bg-white/90 p-4 shadow-2xl ring-1 ring-black/5">
-                <div className="flex items-center justify-between pb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Search
-                  </h3>
-                  <button
-                    onClick={() => setIsSearchOverlayOpen(false)}
-                    className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                    aria-label="Close search overlay"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-                <div className="pb-4">
-                  <SearchBar
-                    value={searchViewModel.query}
-                    onChange={searchViewModel.setQuery}
-                    onSearch={searchViewModel.performSearch}
-                    autoFocus
-                    isLoading={searchViewModel.isLoading}
-                  />
-                </div>
-                <div className="max-h-[70vh] overflow-y-auto">
-                  {searchViewModel.results ? (
-                    <SearchResults
-                      results={searchViewModel.results}
-                      searchViewModel={searchViewModel}
-                    />
-                  ) : (
-                    <div className="py-12 text-center text-gray-600">
-                      {searchViewModel.isLoading
-                        ? 'Searching…'
-                        : 'Type a query and press Enter to search.'}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* User Info & Actions */}
-        <div className="items-left justify-left mb-8 flex rounded-2xl bg-white/40 p-6 shadow-lg backdrop-blur-sm">
-          <PaperFolderIcon text="All" />
-
-          <div className="flex gap-3">
-            {/*  <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
-            >
-              <LogOut className="h-4 w-4" />
-              Logout 
-            </button>*/}
-          </div>
-        </div>
+    
 
         {/* Saved Papers Section */}
         <div className="rounded-2xl bg-white/40 p-6 shadow-lg backdrop-blur-sm">
@@ -218,9 +158,9 @@ export function DashboardView() {
             )}
 
           {/* Papers List */}
-          {dashboardViewModel.savedPapers.length > 0 && (
+          {(dashboardViewModel.filteredSavedPapers.length > 0) && (
             <div className="space-y-4">
-              {dashboardViewModel.savedPapers.map(savedPaper => (
+              {dashboardViewModel.filteredSavedPapers.map(savedPaper => (
                 <div
                   key={savedPaper.id}
                   className="rounded-lg border border-white/20 bg-white/60 p-4 shadow-sm"
