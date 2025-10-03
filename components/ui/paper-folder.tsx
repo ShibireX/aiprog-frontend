@@ -19,10 +19,10 @@ export function PaperFolderIcon({ text = 'PaperFolder', className }: PaperFolder
         className
       )}
     >
-      <span className="flex h-8 w-8 items-center justify-center ">
+      <span className="flex h-8 w-8 items-center justify-center">
         <Folder className="h-5 w-5" />
       </span>
-      <span className="whitespace-nowrap text-sm font-medium">{text}</span>
+      <span className="whitespace-nowrap text-sm font-medium pr-2">{text}</span>
     </div>
   )
 }
