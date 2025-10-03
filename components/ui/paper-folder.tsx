@@ -11,7 +11,7 @@ export function PaperFolderIcon({ text = 'PaperFolder', className }: PaperFolder
     <div
       className={cn(
         'inline-flex items-center gap-2 rounded-full',
-        'bg-gradient-to-br from-blue-500 to-blue-600 text-white',
+        'backdrop-blur-sm border border-white/20 text-gray-700',
         'shadow-lg transition-all duration-300',
         'hover:scale-105 hover:shadow-xl',
         'hover:-translate-y-1 hover:transform',
