@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@/types';
+import type { User } from '@/types';
 import { graphqlClient } from './graphql/client';
 import { GET_CURRENT_USER } from './graphql/queries';
 

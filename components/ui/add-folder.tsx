@@ -1,14 +1,11 @@
-import Link from 'next/link'
 import {  FolderPlus } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { ReactNode } from 'react'
 
 interface FolderProps {
   className?: string
-  link?: string
 }
 
-export function AddFolderIcon({ link = '/dashboard', className }: FolderProps) {
+export function AddFolderIcon({ className }: FolderProps) {
   return (
     <div
       className={cn(

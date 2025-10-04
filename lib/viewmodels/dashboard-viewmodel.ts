@@ -13,7 +13,7 @@ import {
   MOVE_PAPER_TO_FOLDER,
   UNSAVE_PAPER
 } from '@/lib/graphql/queries';
-import { useAuthViewModel, AuthViewModel } from './auth-viewmodel';
+import { useAuthViewModel, type AuthViewModel } from './auth-viewmodel';
 
 export class DashboardViewModel {
   private state: DashboardState;
@@ -145,11 +145,17 @@ export class DashboardViewModel {
     this.updateState({ isLoading: true, error: null });
 
     try {
-      const folderId = this.state.filters.selectedFolderId;
+      // Backend semantics:
+      // - folderId omitted → return ALL papers across folders
+      // - folderId = null  → return ONLY uncategorized papers
+      // - folderId = string → return papers in that folder
+      const selected = this.state.filters.selectedFolderId;
+      const folderIdForQuery = selected === null ? undefined : selected;
+
       const result = await this.getSavedPapersAPI(
         this.state.filters.limit || 10, 
         currentOffset,
-        folderId
+        folderIdForQuery
       );
       
       // Combine with existing papers (for pagination) or replace (for refresh)
