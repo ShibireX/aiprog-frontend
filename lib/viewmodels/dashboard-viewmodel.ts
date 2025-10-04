@@ -2,9 +2,17 @@
 
 import { useState, useRef, useEffect } from 'react';
 import type { DashboardState, DashboardFilters } from '@/types/dashboard';
-import type { SavedPaper } from '@/types/search';
+import type { SavedPaper, Folder } from '@/types/search';
 import { graphqlClient } from '@/lib/graphql/client';
-import { GET_SAVED_PAPERS } from '@/lib/graphql/queries';
+import { 
+  GET_SAVED_PAPERS, 
+  GET_FOLDERS,
+  CREATE_FOLDER,
+  UPDATE_FOLDER,
+  DELETE_FOLDER,
+  MOVE_PAPER_TO_FOLDER,
+  UNSAVE_PAPER
+} from '@/lib/graphql/queries';
 import { useAuthViewModel, AuthViewModel } from './auth-viewmodel';
 
 export class DashboardViewModel {
@@ -19,12 +27,20 @@ export class DashboardViewModel {
   }
 
   // Getters
+  get folders() {
+    return this.state.folders;
+  }
+
   get savedPapers() {
     return this.state.savedPapers;
   }
 
   get isLoading() {
     return this.state.isLoading;
+  }
+
+  get isLoadingFolders() {
+    return this.state.isLoadingFolders;
   }
 
   get error() {
@@ -43,24 +59,78 @@ export class DashboardViewModel {
     return this.state.hasMore;
   }
 
-  // Derived
+  get selectedFolderId() {
+    return this.state.filters.selectedFolderId;
+  }
+
+  get selectedFolder() {
+    if (!this.state.filters.selectedFolderId) return null;
+    return this.state.folders.find(f => f.id === this.state.filters.selectedFolderId) || null;
+  }
+
+  get isAddMapOpen() {
+    return this.state.isAddMapOpen;
+  }
+
+  get newMapName() {
+    return this.state.newMapName;
+  }
+
+  get uncategorizedCount() {
+    return this.state.uncategorizedCount;
+  }
+
   get filteredSavedPapers() {
+    let papers = this.state.savedPapers;
+
+    // Filter by search query
     const query = (this.state.filters.searchQuery || '').trim().toLowerCase();
-    if (!query) return this.state.savedPapers;
-    return this.state.savedPapers.filter(sp => {
-      const paper = sp.paper;
-      const searchableText = [
-        paper.title,
-        paper.authors.join(' '),
-        paper.abstract || '',
-        paper.venue || '',
-        paper.year?.toString() || ''
-      ].join(' ').toLowerCase();
-      return searchableText.includes(query);
-    });
+    if (query) {
+      papers = papers.filter(sp => {
+        const paper = sp.paper;
+        const searchableText = [
+          paper.title,
+          paper.authors.join(' '),
+          paper.abstract || '',
+          paper.venue || '',
+          paper.year?.toString() || ''
+        ].join(' ').toLowerCase();
+        return searchableText.includes(query);
+      });
+    }
+    
+    return papers;
   }
 
   // Actions
+  loadFolders = async () => {
+    if (!this.auth.isAuthenticated) {
+      return;
+    }
+
+    this.updateState({ isLoadingFolders: true, error: null });
+
+    try {
+      const folders = await this.getFoldersAPI();
+      
+      // Calculate total paper count: uncategorized papers + all papers in folders
+      const totalInFolders = folders.reduce((sum, folder) => sum + folder.paperCount, 0);
+      const uncategorizedPapers = await this.getSavedPapersAPI(1000, 0, null);
+      const allPapersCount = uncategorizedPapers.length + totalInFolders;
+      
+      this.updateState({ 
+        folders,
+        uncategorizedCount: allPapersCount,
+        isLoadingFolders: false,
+      });
+    } catch (error) {
+      this.updateState({
+        error: error instanceof Error ? error.message : 'Failed to load folders',
+        isLoadingFolders: false,
+      });
+    }
+  };
+
   loadSavedPapers = async (refresh: boolean = false) => {
     // Check if user is authenticated
     if (!this.auth.isAuthenticated) {
@@ -75,7 +145,12 @@ export class DashboardViewModel {
     this.updateState({ isLoading: true, error: null });
 
     try {
-      const result = await this.getSavedPapersAPI(this.state.filters.limit || 10, currentOffset);
+      const folderId = this.state.filters.selectedFolderId;
+      const result = await this.getSavedPapersAPI(
+        this.state.filters.limit || 10, 
+        currentOffset,
+        folderId
+      );
       
       // Combine with existing papers (for pagination) or replace (for refresh)
       const updatedPapers = refresh ? result : [...currentPapers, ...result];
@@ -83,7 +158,7 @@ export class DashboardViewModel {
       this.updateState({ 
         savedPapers: updatedPapers,
         isLoading: false,
-        hasMore: result.length === (this.state.filters.limit || 10) // Has more if we got a full page
+        hasMore: result.length === (this.state.filters.limit || 10)
       });
     } catch (error) {
       this.updateState({
@@ -111,6 +186,128 @@ export class DashboardViewModel {
     this.setFilters({ searchQuery });
   };
 
+  setSelectedFolder = (selectedFolderId: string | null) => {
+    this.setFilters({ selectedFolderId });
+    // Reload papers when folder changes
+    this.loadSavedPapers(true);
+  };
+
+  openAddMapModal = () => {
+    this.updateState({ isAddMapOpen: true, newMapName: '' });
+  };
+
+  closeAddMapModal = () => {
+    this.updateState({ isAddMapOpen: false, newMapName: '' });
+  };
+
+  setNewMapName = (newMapName: string) => {
+    this.updateState({ newMapName });
+  };
+
+  createMap = async () => {
+    if (!this.state.newMapName.trim()) return;
+
+    try {
+      const newFolder = await this.createFolderAPI(this.state.newMapName);
+      this.updateState({ 
+        folders: [...this.state.folders, newFolder],
+        isAddMapOpen: false,
+        newMapName: ''
+      });
+      
+      // Refresh the total count
+      await this.loadFolders();
+    } catch (error) {
+      this.updateState({
+        error: error instanceof Error ? error.message : 'Failed to create folder',
+      });
+    }
+  };
+
+  deleteFolder = async (folderId: string) => {
+    try {
+      await this.deleteFolderAPI(folderId);
+      
+      // If we deleted the selected folder, switch to "All"
+      if (this.state.filters.selectedFolderId === folderId) {
+        this.setSelectedFolder(null);
+      }
+
+      // Refresh folders and total count
+      await this.loadFolders();
+    } catch (error) {
+      this.updateState({
+        error: error instanceof Error ? error.message : 'Failed to delete folder',
+      });
+    }
+  };
+
+  renameFolder = async (folderId: string, newName: string) => {
+    try {
+      const updatedFolder = await this.updateFolderAPI(folderId, newName);
+      
+      // Update folder in state
+      const updatedFolders = this.state.folders.map(f => 
+        f.id === folderId ? { ...f, name: updatedFolder.name, updatedAt: updatedFolder.updatedAt } : f
+      );
+      this.updateState({ folders: updatedFolders });
+    } catch (error) {
+      this.updateState({
+        error: error instanceof Error ? error.message : 'Failed to rename folder',
+      });
+    }
+  };
+
+  movePaperToFolder = async (savedPaperId: string, folderId: string | null) => {
+    try {
+      // Find the paper to get its paperId (not the savedPaper.id)
+      const savedPaper = this.state.savedPapers.find(p => p.id === savedPaperId);
+      if (!savedPaper) {
+        throw new Error('Paper not found in saved papers');
+      }
+
+      // Use the paper ID (not the saved_papers row ID)
+      await this.movePaperToFolderAPI(savedPaper.paperId, folderId);
+      
+      // Update paper in state
+      const updatedPapers = this.state.savedPapers.map(p => 
+        p.id === savedPaperId ? { ...p, folderId: folderId || undefined } : p
+      );
+      this.updateState({ savedPapers: updatedPapers });
+
+      // Refresh folders and uncategorized count
+      await this.loadFolders();
+    } catch (error) {
+      this.updateState({
+        error: error instanceof Error ? error.message : 'Failed to move paper',
+      });
+    }
+  };
+
+  unsavePaper = async (savedPaperId: string) => {
+    try {
+      // Find the paper to get its paperId (not the savedPaper.id)
+      const savedPaper = this.state.savedPapers.find(p => p.id === savedPaperId);
+      if (!savedPaper) {
+        throw new Error('Paper not found in saved papers');
+      }
+
+      // Use the paper ID (not the saved_papers row ID)
+      await this.unsavePaperAPI(savedPaper.paperId);
+      
+      // Remove paper from state
+      const updatedPapers = this.state.savedPapers.filter(p => p.id !== savedPaperId);
+      this.updateState({ savedPapers: updatedPapers });
+
+      // Refresh folders and uncategorized count
+      await this.loadFolders();
+    } catch (error) {
+      this.updateState({
+        error: error instanceof Error ? error.message : 'Failed to unsave paper',
+      });
+    }
+  };
+
   clearError = () => {
     this.updateState({ error: null });
   };
@@ -120,12 +317,29 @@ export class DashboardViewModel {
     this.setState(this.state);
   };
 
-  // GraphQL API call
-  private getSavedPapersAPI = async (limit: number, offset: number): Promise<SavedPaper[]> => {
-    const variables = {
+  // GraphQL API calls
+  private getFoldersAPI = async (): Promise<Folder[]> => {
+    const response = await graphqlClient.request<{ getFolders: Folder[] }>({
+      query: GET_FOLDERS,
+    });
+
+    return response.getFolders;
+  };
+
+  private getSavedPapersAPI = async (
+    limit: number,
+    offset: number,
+    folderId?: string | null
+  ): Promise<SavedPaper[]> => {
+    const variables: any = {
       limit,
       offset,
     };
+
+    // Only include folderId if it's defined (not undefined)
+    if (folderId !== undefined) {
+      variables.folderId = folderId;
+    }
 
     const response = await graphqlClient.request<{ getSavedPapers: SavedPaper[] }>({
       query: GET_SAVED_PAPERS,
@@ -134,27 +348,100 @@ export class DashboardViewModel {
 
     return response.getSavedPapers;
   };
+
+  private createFolderAPI = async (name: string): Promise<Folder> => {
+    const variables = {
+      input: { name },
+    };
+
+    const response = await graphqlClient.request<{ createFolder: Folder }>({
+      query: CREATE_FOLDER,
+      variables,
+    });
+
+    return response.createFolder;
+  };
+
+  private updateFolderAPI = async (folderId: string, name: string): Promise<Folder> => {
+    const variables = {
+      id: folderId,
+      input: { name },
+    };
+
+    const response = await graphqlClient.request<{ updateFolder: Folder }>({
+      query: UPDATE_FOLDER,
+      variables,
+    });
+
+    return response.updateFolder;
+  };
+
+  private deleteFolderAPI = async (folderId: string): Promise<boolean> => {
+    const variables = { id: folderId };
+
+    const response = await graphqlClient.request<{ deleteFolder: boolean }>({
+      query: DELETE_FOLDER,
+      variables,
+    });
+
+    return response.deleteFolder;
+  };
+
+  private movePaperToFolderAPI = async (
+    paperId: string,
+    folderId: string | null
+  ): Promise<SavedPaper> => {
+    const variables = {
+      paperId,
+      folderId,
+    };
+
+    const response = await graphqlClient.request<{ movePaperToFolder: SavedPaper }>({
+      query: MOVE_PAPER_TO_FOLDER,
+      variables,
+    });
+
+    return response.movePaperToFolder;
+  };
+
+  private unsavePaperAPI = async (paperId: string): Promise<boolean> => {
+    const variables = { paperId };
+
+    const response = await graphqlClient.request<{ unsavePaper: boolean }>({
+      query: UNSAVE_PAPER,
+      variables,
+    });
+
+    return response.unsavePaper;
+  };
 }
 
 export function useDashboardViewModel() {
   const authViewModel = useAuthViewModel();
   const [state, setState] = useState<DashboardState>({
+    folders: [],
     savedPapers: [],
+    uncategorizedCount: 0,
     isLoading: false,
+    isLoadingFolders: false,
     error: null,
     filters: {
       limit: 10,
       offset: 0,
+      selectedFolderId: null, // Default to "All" (no folder filter)
     },
     hasMore: false,
+    isAddMapOpen: false,
+    newMapName: '',
   });
 
   const viewModel = useRef(new DashboardViewModel(state, setState, authViewModel));
   viewModel.current = new DashboardViewModel(state, setState, authViewModel);
 
-  // Auto-load papers when authenticated (MVVM compliant)
+  // Auto-load folders and papers when authenticated (MVVM compliant)
   useEffect(() => {
     if (authViewModel.isAuthenticated) {
+      viewModel.current.loadFolders();
       viewModel.current.loadSavedPapers(true);
     }
   }, [authViewModel.isAuthenticated]);
