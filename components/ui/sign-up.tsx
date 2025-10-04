@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import { AuthState, AuthMode } from '@/types/signup'
+import type { AuthState, AuthMode } from '@/types/signup'
 import { cn } from '@/lib/utils'
 
 interface AuthFormProps extends AuthState {

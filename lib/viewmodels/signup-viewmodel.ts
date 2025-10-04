@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { RegisterResponse, LoginResponse, AuthState, AuthMode } from '@/types/signup';
+import type { RegisterResponse, LoginResponse, AuthState, AuthMode } from '@/types/signup';
 import { graphqlClient } from '@/lib/graphql/client';
 import { REGISTER_USER, LOGIN_USER } from '../graphql/queries';
 
@@ -144,7 +144,7 @@ export class AuthFormViewModel {
     }
   };
 
-  private handleAuthSuccess = (token: string, user: any) => {
+  private handleAuthSuccess = (token: string, _user: any) => {
     // Set token for GraphQL client
     graphqlClient.setAuthToken?.(token);
     

@@ -7,12 +7,21 @@ import { FolderSelectionPopup } from '@/components/ui/folder-selection-popup'
 import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/ui/user-avatar'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function SearchPage() {
   const searchViewModel = useSearchViewModel()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
+    <AnimatePresence mode="wait">
+      <motion.div
+        key="search"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50"
+      >
       {/* Header Section */}
       <div className="relative">
       <div className="flex justify-end place-items-end px-4 flex-row p-4">
@@ -25,13 +34,12 @@ export function SearchPage() {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
             <div className="mb-6">
-              <h1 className="mb-2 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-black tracking-tight text-transparent sm:text-7xl">
-                Papr
+              <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
+                [ Papr ]
               </h1>
-              <div className="mx-auto h-1 w-24 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600"></div>
             </div>
             <p className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700">
-              Discover and reference scientific publications with ease
+              Your personal research library and citation assistant
             </p>
           </div>
 
@@ -64,12 +72,12 @@ export function SearchPage() {
             {/* About Papr Section */}
             <div className="text-center">
               <h2 className="mb-6 text-3xl font-bold text-gray-900">
-                Revolutionizing Scientific Discovery
+                Streamline Your Academic Research
               </h2>
               <p className="mx-auto max-w-4xl text-xl font-light leading-relaxed text-gray-600">
-                Papr harnesses the power of artificial intelligence to transform
-                how students and researchers discover, analyze, and connect
-                scientific publications across disciplines
+                Search millions of academic papers, save your favorites to organized 
+                folders, and generate citations instantly. Everything you need to 
+                manage your research in one place.
               </p>
             </div>
 
@@ -91,8 +99,8 @@ export function SearchPage() {
                     />
                   </svg>
                 }
-                title="Intelligent Search"
-                description="Our AI understands context and semantics, delivering precisely what you need from millions of publications."
+                title="Search & Discover"
+                description="Find academic papers across all disciplines. Search by title, author, topic, or keywords to discover relevant research instantly."
               />
 
               <InfoCard
@@ -107,12 +115,12 @@ export function SearchPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
                     />
                   </svg>
                 }
-                title="Deep Analytics"
-                description="Uncover research trends, citation patterns, and emerging topics with comprehensive insights and visualizations."
+                title="Organize & Save"
+                description="Build your personal research library. Create custom folders to organize papers by topic, project, or any way that suits your workflow."
               />
 
               <InfoCard
@@ -127,12 +135,12 @@ export function SearchPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
                 }
-                title="Knowledge Networks"
-                description="Discover hidden connections between papers, authors, and research domains across the scientific landscape."
+                title="Cite Easily"
+                description="Generate citations instantly in multiple formats. Save time on bibliography management with bulk citation export for your saved papers."
               />
             </div>
           </div>
@@ -143,6 +151,7 @@ export function SearchPage() {
 
       {/* Folder Selection Popup */}
       <FolderSelectionPopup searchViewModel={searchViewModel} />
-    </div>
+      </motion.div>
+    </AnimatePresence>
   )
 }

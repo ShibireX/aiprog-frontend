@@ -75,6 +75,7 @@ export const REGISTER_USER = `
         id
         email
         username
+        thumbnailUrl
         createdAt
         updatedAt
       }
@@ -90,6 +91,7 @@ export const LOGIN_USER = `
         id
         email
         username
+        thumbnailUrl
         createdAt
         updatedAt
       }
@@ -103,6 +105,7 @@ export const GET_CURRENT_USER = `
       id
       email
       username
+      thumbnailUrl
       createdAt
       updatedAt
     }

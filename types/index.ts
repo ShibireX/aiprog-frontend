@@ -2,9 +2,11 @@
 
 export interface User {
   id: string
-  name: string
   email: string
-  image?: string
+  username: string
+  thumbnailUrl?: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface ApiResponse<T = any> {

@@ -3,9 +3,10 @@
 import { useAuthViewModel } from '@/lib/viewmodels/auth-viewmodel'
 import { useDashboardViewModel } from '@/lib/viewmodels/dashboard-viewmodel'
 import { useCitationViewModel } from '@/lib/viewmodels/citation-viewmodel'
-import { useRouter } from 'next/navigation'
-import { RefreshCw, BookmarkCheck, FileText, Folder, FolderPlus, X, Trash2 } from 'lucide-react'
+import { RefreshCw, BookmarkCheck, FileText, Folder, FolderPlus, X, Trash2, Camera, Upload } from 'lucide-react'
+import Image from 'next/image'
 import { CitationPopup } from '@/components/ui/citation-popup'
+import { AnimatePresence, motion } from 'framer-motion'
 import { SearchBar } from '../ui/search-bar'
 import { cn } from '@/lib/utils'
 import { IconButton } from '../ui/icon-button'
@@ -13,19 +14,39 @@ export function DashboardView() {
   const authViewModel = useAuthViewModel()
   const dashboardViewModel = useDashboardViewModel()
   const citationViewModel = useCitationViewModel()
-  const router = useRouter()
-
-  const handleLogout = () => {
-    authViewModel.logout()
-    router.push('/')
-  }
 
   const handleBulkCitation = () => {
     citationViewModel.openPopup(dashboardViewModel.filteredSavedPapers)
   }
 
+  const handleAvatarClick = () => {
+    // Prevent multiple uploads at once
+    if (authViewModel.isUploadingThumbnail) {
+      return
+    }
+
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/jpeg,image/jpg,image/png,image/gif,image/webp'
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (file) {
+        await authViewModel.uploadThumbnail(file)
+      }
+    }
+    input.click()
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 p-4">
+    <AnimatePresence mode="wait">
+      <motion.div
+        key="dashboard"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 p-4"
+      >
       {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-40"
@@ -36,7 +57,51 @@ export function DashboardView() {
       <IconButton link="/" className="relative z-10" />
       <div className="relative z-10 mx-auto w-full max-w-6xl">
         {/* Header */}
-        <div className="mb-8 mt-12 text-center">
+        <div className="mb-8 mt-12 flex flex-col items-center">
+          {/* User Avatar */}
+          {authViewModel.user && (
+            <div className="mb-6">
+              <div 
+                className="relative w-24 h-24 cursor-pointer group"
+                onClick={handleAvatarClick}
+                title="Click to upload profile picture"
+              >
+                {authViewModel.user.thumbnailUrl ? (
+                  <Image
+                    src={authViewModel.user.thumbnailUrl}
+                    alt={authViewModel.user.username}
+                    width={96}
+                    height={96}
+                    className="rounded-full border-4 border-white shadow-lg object-cover"
+                    priority
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                    <span className="text-3xl font-bold text-white">
+                      {authViewModel.user.username?.charAt(0).toUpperCase() || authViewModel.user.email?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
+                
+                {/* Camera Overlay */}
+                <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                  {authViewModel.isUploadingThumbnail ? (
+                    <Upload className="w-8 h-8 text-white animate-bounce" />
+                  ) : (
+                    <Camera className="w-8 h-8 text-white" />
+                  )}
+                </div>
+              </div>
+              
+              {/* Upload Error Message */}
+              {authViewModel.uploadError && (
+                <p className="mt-2 text-sm text-red-600 text-center">
+                  {authViewModel.uploadError}
+                </p>
+              )}
+            </div>
+          )}
+
           <h1 className="mb-2 text-4xl font-bold text-gray-900">
             {authViewModel.user && (
               <p className="text-gray-700">
@@ -351,6 +416,7 @@ export function DashboardView() {
           </div>
         </div>
       )}
-    </div>
+      </motion.div>
+    </AnimatePresence>
   )
 }

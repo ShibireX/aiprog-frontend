@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { SearchState, SearchFilters, SearchResult, SavedPaper, Folder } from '@/types/search';
 import { graphqlClient } from '@/lib/graphql/client';
 import { SAVE_PAPER, UNSAVE_PAPER, SEARCH_PAPERS, GET_SAVED_PAPERS, GET_FOLDERS, CREATE_FOLDER, MOVE_PAPER_TO_FOLDER } from '@/lib/graphql/queries';
-import { useAuthViewModel, AuthViewModel } from './auth-viewmodel';
+import { useAuthViewModel, type AuthViewModel } from './auth-viewmodel';
 
 export class SearchViewModel {
   private state: SearchState;

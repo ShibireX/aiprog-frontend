@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import type { CitationState, CitationFormat, CitationFormatOption, CitationFormats } from '@/types/citation';
+import type { CitationState, CitationFormat, CitationFormats } from '@/types/citation';
 import type { SavedPaper } from '@/types/search';
 
 const CITATION_FORMATS: CitationFormats = {
@@ -112,7 +112,7 @@ export class CitationViewModel {
   };
 
   private formatCitations = (papers: SavedPaper[], format: CitationFormat): string => {
-    return papers.map((savedPaper, index) => {
+    return papers.map((savedPaper, _index) => {
       const paper = savedPaper.paper;
       const authors = paper.authors.slice(0, 3).join(', ');
       const moreAuthors = paper.authors.length > 3 ? ' et al.' : '';
