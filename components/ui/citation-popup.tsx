@@ -39,8 +39,12 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <FileText className="h-6 w-6 text-blue-600" />
-            <h2 className="text-2xl font-semibold text-gray-900">Bulk Citations</h2>
-            <span className="text-gray-500">({citationViewModel.selectedPapers.length} papers)</span>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              {citationViewModel.selectedPapers.length === 1 ? 'Citation' : 'Bulk Citations'}
+            </h2>
+            <span className="text-gray-500">
+              ({citationViewModel.selectedPapers.length} {citationViewModel.selectedPapers.length === 1 ? 'paper' : 'papers'})
+            </span>
           </div>
           <button
             onClick={citationViewModel.closePopup}

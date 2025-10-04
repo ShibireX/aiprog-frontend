@@ -3,6 +3,7 @@
 import { SearchBar } from '@/components/ui/search-bar'
 import { InfoCard } from '@/components/ui/info-card'
 import { SearchResults } from '@/components/search/search-results'
+import { FolderSelectionPopup } from '@/components/ui/folder-selection-popup'
 import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/ui/user-avatar'
@@ -139,6 +140,9 @@ export function SearchPage() {
           <SearchResults results={searchViewModel.results} searchViewModel={searchViewModel} />
         ) : null}
       </div>
+
+      {/* Folder Selection Popup */}
+      <FolderSelectionPopup searchViewModel={searchViewModel} />
     </div>
   )
 }

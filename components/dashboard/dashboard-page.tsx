@@ -4,22 +4,15 @@ import { useAuthViewModel } from '@/lib/viewmodels/auth-viewmodel'
 import { useDashboardViewModel } from '@/lib/viewmodels/dashboard-viewmodel'
 import { useCitationViewModel } from '@/lib/viewmodels/citation-viewmodel'
 import { useRouter } from 'next/navigation'
-import {LogOut,RefreshCw,BookmarkCheck,FileText,X,ArrowLeft,} from 'lucide-react'
+import { RefreshCw, BookmarkCheck, FileText, Folder, FolderPlus, X, Trash2 } from 'lucide-react'
 import { CitationPopup } from '@/components/ui/citation-popup'
-import { UserAvatar } from '@/components/ui/user-avatar'
-import { PaperFolderIcon } from '@/components/ui/paper-folder'
-import { AddFolderIcon } from '@/components/ui/add-folder'
 import { SearchBar } from '../ui/search-bar'
-import { SearchResults } from '@/components/search/search-results'
-import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { IconButton } from '../ui/icon-button'
 export function DashboardView() {
   const authViewModel = useAuthViewModel()
   const dashboardViewModel = useDashboardViewModel()
   const citationViewModel = useCitationViewModel()
-  const searchViewModel = useSearchViewModel()
   const router = useRouter()
 
   const handleLogout = () => {
@@ -28,7 +21,7 @@ export function DashboardView() {
   }
 
   const handleBulkCitation = () => {
-    citationViewModel.openPopup(dashboardViewModel.savedPapers)
+    citationViewModel.openPopup(dashboardViewModel.filteredSavedPapers)
   }
 
   return (
@@ -47,77 +40,105 @@ export function DashboardView() {
           <h1 className="mb-2 text-4xl font-bold text-gray-900">
             {authViewModel.user && (
               <p className="text-gray-700">
-                Welcome,
-                <span className="font-semibold">
-                  {authViewModel.user.email}
-                </span>
+                Your Dashboard
               </p>
             )}
           </h1>
 
           <p className="text-gray-600">Manage your saved papers and research</p>
         </div>
-        {/* User Info & Actions */}
-        <div className="items-left justify-left  flex ">
-          <PaperFolderIcon text="All" />
+          {/* Maps/Folders Section */}
+          <div className="mb-6 mt-14">
+            <div className="flex items-center gap-3 flex-wrap">
+              <button
+                onClick={() => dashboardViewModel.setSelectedFolder(null)}
+                className={cn(
+                  'inline-flex items-center gap-2 rounded-full',
+                  'backdrop-blur-sm border text-sm font-medium',
+                  'shadow-md transition-all duration-200',
+                  'hover:scale-105 hover:shadow-lg',
+                  'px-4 py-2',
+                  dashboardViewModel.selectedFolderId === null
+                    ? 'bg-blue-500 text-white border-blue-600'
+                    : 'bg-white/80 text-gray-700 border-white/20 hover:bg-white'
+                )}
+              >
+                <Folder className="h-4 w-4" />
+                <span>All</span>
+                <span className="text-xs opacity-80">
+                  ({dashboardViewModel.uncategorizedCount})
+                </span>
+              </button>
+            
+            {dashboardViewModel.folders.map(folder => (
+              <button
+                key={folder.id}
+                onClick={() => dashboardViewModel.setSelectedFolder(folder.id)}
+                className={cn(
+                  'inline-flex items-center gap-2 rounded-full',
+                  'backdrop-blur-sm border text-sm font-medium',
+                  'shadow-md transition-all duration-200',
+                  'hover:scale-105 hover:shadow-lg',
+                  'px-4 py-2',
+                  dashboardViewModel.selectedFolderId === folder.id
+                    ? 'bg-blue-500 text-white border-blue-600'
+                    : 'bg-white/80 text-gray-700 border-white/20 hover:bg-white'
+                )}
+              >
+                <Folder className="h-4 w-4" />
+                <span>{folder.name}</span>
+                <span className="text-xs opacity-80">
+                  ({folder.paperCount})
+                </span>
+              </button>
+            ))}
 
-          <div className="flex gap-3">
-           {/*  <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
-            >
-              <LogOut className="h-4 w-4" />
-              Logout 
-            </button>*/}
-          </div>
-        </div>
-        <div
-          className="relative flex items-center justify-center py-4"
-        >
-          <div
-            className="absolute left-0 top-1/2 flex -translate-y-1/2 items-center"
-            onClick={e => e.stopPropagation()}
-          >
-            <AddFolderIcon />
+            {/* Add Map Button */}
             <button
-              onClick={() => dashboardViewModel.refreshPapers()}
-              disabled={dashboardViewModel.isLoading}
-              className={cn(
-                'flex h-12 w-12 items-center justify-center rounded-full',
-                'bg-gradient-to-br from-blue-500 to-blue-600 text-white',
-                'shadow-lg transition-all duration-300',
-                'hover:scale-105 hover:shadow-xl',
-                'hover:-translate-y-1 hover:transform',
-                'm-4'
-              )}
+              onClick={() => dashboardViewModel.openAddMapModal()}
+              className="p-2 text-blue-600 hover:text-blue-700 transition-all duration-200 hover:scale-110"
+              title="Create new map"
             >
-              <RefreshCw
-                className={`h-4 w-4 ${dashboardViewModel.isLoading ? 'animate-spin' : ''}`}
-              />
+              <FolderPlus className="h-6 w-6" />
             </button>
           </div>
-
-          <SearchBar
-            value={dashboardViewModel.filters.searchQuery || ''}
-            onChange={dashboardViewModel.setSearchQuery}
-            onSearch={() => {}}
-            autoFocus
-            placeholder="Search a paper based on title"
-            isLoading={dashboardViewModel.isLoading}
-          />
         </div>
-    
 
         {/* Saved Papers Section */}
-        <div className="rounded-2xl bg-white/40 p-6 shadow-lg backdrop-blur-sm">
-          <div className="mb-6 flex items-center gap-2">
-            <BookmarkCheck className="h-6 w-6 text-blue-600" />
-            <h2 className="text-2xl font-semibold text-gray-900">
-              Saved Papers
-            </h2>
-            <span className="text-gray-500">
-              ({dashboardViewModel.savedPapers.length})
-            </span>
+        <div className="space-y-6">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BookmarkCheck className="h-6 w-6 text-blue-600" />
+              <h2 className="text-2xl font-semibold text-gray-900">
+                {dashboardViewModel.selectedFolder?.name || 'All'} Papers
+              </h2>
+            </div>
+            <div className="flex items-center space-x-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-gray-700 font-medium">
+                {(() => {
+                  const count = dashboardViewModel.selectedFolderId === null 
+                    ? dashboardViewModel.uncategorizedCount 
+                    : dashboardViewModel.selectedFolder?.paperCount || 0;
+                  return `${count} ${count === 1 ? 'paper' : 'papers'}`;
+                })()}
+              </span>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div>
+            <SearchBar
+              value={dashboardViewModel.filters.searchQuery || ''}
+              onChange={dashboardViewModel.setSearchQuery}
+              onSearch={() => {}}
+              autoFocus={false}
+              placeholder="Search papers by title, author, or venue..."
+              isLoading={dashboardViewModel.isLoading}
+              className="max-w-none"
+              hideSearchButton
+            />
           </div>
 
           {/* Loading State */}
@@ -157,70 +178,96 @@ export function DashboardView() {
               </div>
             )}
 
-          {/* Papers List */}
-          {(dashboardViewModel.filteredSavedPapers.length > 0) && (
-            <div className="space-y-4">
+          {/* Papers Grid */}
+          {dashboardViewModel.filteredSavedPapers.length > 0 && (
+            <div className="grid grid-cols-1 gap-6">
               {dashboardViewModel.filteredSavedPapers.map(savedPaper => (
                 <div
                   key={savedPaper.id}
-                  className="rounded-lg border border-white/20 bg-white/60 p-4 shadow-sm"
+                  className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 group hover:shadow-xl hover:bg-white/90 relative"
                 >
-                  <h3 className="mb-2 font-semibold text-gray-900">
-                    {savedPaper.paper.title}
-                  </h3>
-                  <p className="mb-2 text-sm text-gray-600">
-                    {savedPaper.paper.authors.join(', ')}
-                  </p>
-                  {savedPaper.paper.abstract && (
-                    <p className="mb-3 line-clamp-3 text-sm text-gray-700">
-                      {savedPaper.paper.abstract}
-                    </p>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-2">
-                      {savedPaper.paper.year && (
-                        <span className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700">
-                          {savedPaper.paper.year}
-                        </span>
+                  {/* Action Buttons - Top Right */}
+                  <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        citationViewModel.openPopup([savedPaper]);
+                      }}
+                      className="p-2 rounded-full transition-all duration-200 shadow-md text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300"
+                      title="Get citation"
+                    >
+                      <FileText className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (confirm('Are you sure you want to remove this paper from your collection?')) {
+                          dashboardViewModel.unsavePaper(savedPaper.id);
+                        }
+                      }}
+                      className="p-2 rounded-full transition-all duration-200 shadow-md text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 hover:border-red-300"
+                      title="Remove from collection"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="w-full text-left p-6 pr-24">
+                    <div className="space-y-4">
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-900 transition-colors leading-tight">
+                        {savedPaper.paper.title}
+                      </h3>
+
+                      {/* Authors */}
+                      <p className="text-gray-600 font-medium text-base">
+                        {savedPaper.paper.authors.join(', ')}
+                      </p>
+
+                      {/* Abstract */}
+                      {savedPaper.paper.abstract && (
+                        <p className="text-gray-700 leading-relaxed text-sm line-clamp-3">
+                          {savedPaper.paper.abstract}
+                        </p>
                       )}
-                      {savedPaper.paper.venue && (
-                        <span className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-700">
-                          {savedPaper.paper.venue}
+
+                      {/* Metadata Tags */}
+                      <div className="flex items-center flex-wrap gap-2 pt-2">
+                        {savedPaper.paper.year && (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                            {savedPaper.paper.year}
+                          </span>
+                        )}
+                        {savedPaper.paper.venue && (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            {savedPaper.paper.venue}
+                          </span>
+                        )}
+                        {savedPaper.paper.citationCount !== undefined && (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            {savedPaper.paper.citationCount} citations
+                          </span>
+                        )}
+                        <span className="ml-auto text-xs text-gray-500">
+                          Saved {new Date(savedPaper.createdAt).toLocaleDateString()}
                         </span>
-                      )}
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-500">
-                      Saved{' '}
-                      {new Date(savedPaper.createdAt).toLocaleDateString()}
-                    </p>
                   </div>
                 </div>
               ))}
-
-              {/* Load More Button */}
-              {dashboardViewModel.hasMore && (
-                <div className="pt-4 text-center">
-                  <button
-                    onClick={() => dashboardViewModel.loadMorePapers()}
-                    disabled={dashboardViewModel.isLoading}
-                    className="rounded-lg bg-blue-500 px-6 py-2 text-white transition-colors hover:bg-blue-600 disabled:opacity-50"
-                  >
-                    {dashboardViewModel.isLoading ? 'Loading...' : 'Load More'}
-                  </button>
-                </div>
-              )}
             </div>
           )}
 
           {/* Bulk Citation Button */}
-          {dashboardViewModel.savedPapers.length > 0 && (
-            <div className="mt-6 text-center">
+          {dashboardViewModel.filteredSavedPapers.length > 1 && (
+            <div className="text-center pt-4 pb-8">
               <button
                 onClick={handleBulkCitation}
                 className="mx-auto flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-600 hover:to-blue-700 hover:shadow-lg"
               >
                 <FileText className="h-5 w-5" />
-                Bulk Citation ({dashboardViewModel.savedPapers.length} papers)
+                Bulk Citation ({dashboardViewModel.filteredSavedPapers.length} papers)
               </button>
             </div>
           )}
@@ -229,6 +276,81 @@ export function DashboardView() {
 
       {/* Citation Popup */}
       <CitationPopup citationViewModel={citationViewModel} />
+
+      {/* Add Map Popup */}
+      {dashboardViewModel.isAddMapOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => dashboardViewModel.closeAddMapModal()}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <FolderPlus className="h-6 w-6 text-blue-600" />
+                <h2 className="text-2xl font-semibold text-gray-900">Create New Map</h2>
+              </div>
+              <button
+                onClick={() => dashboardViewModel.closeAddMapModal()}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <label htmlFor="map-name" className="block text-sm font-medium text-gray-700 mb-2">
+                Map Name
+              </label>
+              <input
+                id="map-name"
+                type="text"
+                value={dashboardViewModel.newMapName}
+                onChange={(e) => dashboardViewModel.setNewMapName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    dashboardViewModel.createMap()
+                  } else if (e.key === 'Escape') {
+                    dashboardViewModel.closeAddMapModal()
+                  }
+                }}
+                placeholder="e.g., Computer Vision, Machine Learning"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                autoFocus
+              />
+              <p className="mt-2 text-sm text-gray-500">
+                Choose a descriptive name for your research map
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-3 p-6 bg-gray-50 border-t border-gray-200">
+              <button
+                onClick={() => dashboardViewModel.closeAddMapModal()}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => dashboardViewModel.createMap()}
+                disabled={!dashboardViewModel.newMapName.trim()}
+                className={cn(
+                  "px-6 py-2 rounded-lg transition-all duration-200",
+                  dashboardViewModel.newMapName.trim()
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-md hover:shadow-lg"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                )}
+              >
+                Create Map
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

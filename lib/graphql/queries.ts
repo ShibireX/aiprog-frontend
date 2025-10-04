@@ -61,6 +61,12 @@ export const SAVE_PAPER = `
   }
 `;
 
+export const UNSAVE_PAPER = `
+  mutation UnsavePaper($paperId: String!) {
+    unsavePaper(paperId: $paperId)
+  }
+`;
+
 export const REGISTER_USER = `
   mutation Register($input: RegisterInput!) {
     register(input: $input) {
@@ -104,11 +110,12 @@ export const GET_CURRENT_USER = `
 `;
 
 export const GET_SAVED_PAPERS = `
-  query GetSavedPapers($limit: Int = 10, $offset: Int = 0) {
-    getSavedPapers(limit: $limit, offset: $offset) {
+  query GetSavedPapers($limit: Int = 10, $offset: Int = 0, $folderId: String) {
+    getSavedPapers(limit: $limit, offset: $offset, folderId: $folderId) {
       id
       userId
       paperId
+      folderId
       paper {
         id
         semanticScholarId
@@ -127,6 +134,87 @@ export const GET_SAVED_PAPERS = `
       notes
       tags
       createdAt
+    }
+  }
+`;
+
+export const GET_FOLDERS = `
+  query GetFolders {
+    getFolders {
+      id
+      name
+      paperCount
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_FOLDER_WITH_PAPERS = `
+  query GetFolderWithPapers($id: String!) {
+    getFolder(id: $id) {
+      id
+      name
+      paperCount
+      createdAt
+      updatedAt
+      papers {
+        id
+        folderId
+        notes
+        tags
+        createdAt
+        paper {
+          id
+          title
+          authors
+          year
+          abstract
+          venue
+          citationCount
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_FOLDER = `
+  mutation CreateFolder($input: CreateFolderInput!) {
+    createFolder(input: $input) {
+      id
+      name
+      paperCount
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const UPDATE_FOLDER = `
+  mutation UpdateFolder($id: String!, $input: UpdateFolderInput!) {
+    updateFolder(id: $id, input: $input) {
+      id
+      name
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_FOLDER = `
+  mutation DeleteFolder($id: String!) {
+    deleteFolder(id: $id)
+  }
+`;
+
+export const MOVE_PAPER_TO_FOLDER = `
+  mutation MovePaperToFolder($paperId: String!, $folderId: String) {
+    movePaperToFolder(paperId: $paperId, folderId: $folderId) {
+      id
+      folderId
+      paper {
+        id
+        title
+      }
     }
   }
 `;

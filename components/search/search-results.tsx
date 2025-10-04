@@ -85,9 +85,15 @@ export function SearchResults({ results, searchViewModel, onPaperClick }: Search
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  searchViewModel.savePaper(paper.id);
+                  if (searchViewModel.savedPapers.has(paper.id)) {
+                    if (confirm('Remove this paper from your collection?')) {
+                      searchViewModel.unsavePaper(paper.id);
+                    }
+                  } else {
+                    searchViewModel.savePaper(paper.id);
+                  }
                 }}
-                disabled={searchViewModel.savedPapers.has(paper.id) || searchViewModel.savingPapers.has(paper.id)}
+                disabled={searchViewModel.savingPapers.has(paper.id)}
                 className={cn(
                   "absolute top-4 right-4 z-10 p-2 rounded-full transition-all duration-200 shadow-md",
                   searchViewModel.savedPapers.has(paper.id)

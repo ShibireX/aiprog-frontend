@@ -11,6 +11,7 @@ interface SearchBarProps {
   className?: string;
   autoFocus?: boolean;
   isLoading?: boolean;
+  hideSearchButton?: boolean;
 }
 
 export function SearchBar({
@@ -21,6 +22,7 @@ export function SearchBar({
   className,
   autoFocus = false,
   isLoading = false,
+  hideSearchButton = false,
 }: SearchBarProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
@@ -148,24 +150,28 @@ export function SearchBar({
             </button>
           )}
           
-          {isLoading ? (
-            <div className="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full" />
-          ) : (
-            <button
-              onClick={onSearch}
-              disabled={!value.trim()}
-              className={cn(
-                'p-2 rounded-xl transition-all duration-200',
-                value.trim() 
-                  ? 'bg-blue-500 text-white hover:bg-blue-600 hover:scale-105 shadow-lg' 
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+          {!hideSearchButton && (
+            <>
+              {isLoading ? (
+                <div className="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full" />
+              ) : (
+                <button
+                  onClick={onSearch}
+                  disabled={!value.trim()}
+                  className={cn(
+                    'p-2 rounded-xl transition-all duration-200',
+                    value.trim() 
+                      ? 'bg-blue-500 text-white hover:bg-blue-600 hover:scale-105 shadow-lg' 
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  )}
+                  type="button"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
               )}
-              type="button"
-            >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+            </>
           )}
         </div>
       </div>
