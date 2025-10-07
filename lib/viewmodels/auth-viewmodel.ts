@@ -91,7 +91,7 @@ export class AuthViewModel {
       const formData = new FormData();
       formData.append('file', file);
 
-      const endpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const endpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000';
       const response = await fetch(`${endpoint}/api/upload-thumbnail`, {
         method: 'POST',
         headers: {
