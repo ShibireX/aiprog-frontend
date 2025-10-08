@@ -1,350 +1,390 @@
-'use client';
+'use client'
 
-import { useState, useRef, useEffect } from 'react';
-import type { SearchState, SearchFilters, SearchResult, SavedPaper, Folder } from '@/types/search';
-import { graphqlClient } from '@/lib/graphql/client';
-import { SAVE_PAPER, UNSAVE_PAPER, SEARCH_PAPERS, GET_SAVED_PAPERS, GET_FOLDERS, CREATE_FOLDER, MOVE_PAPER_TO_FOLDER } from '@/lib/graphql/queries';
-import { useAuthViewModel, type AuthViewModel } from './auth-viewmodel';
+import { useState, useRef, useEffect } from 'react'
+import type {
+  SearchState,
+  SearchFilters,
+  SearchResult,
+  SavedPaper,
+  Folder,
+} from '@/types/search'
+import { graphqlClient } from '@/lib/graphql/client'
+import {
+  SAVE_PAPER,
+  UNSAVE_PAPER,
+  SEARCH_PAPERS,
+  GET_SAVED_PAPERS,
+  GET_FOLDERS,
+  CREATE_FOLDER,
+  MOVE_PAPER_TO_FOLDER,
+} from '@/lib/graphql/queries'
+import { useAuthViewModel, type AuthViewModel } from './auth-viewmodel'
 
 export class SearchViewModel {
-  private state: SearchState;
-  private setState: (state: SearchState) => void;
-  public auth: AuthViewModel;
+  private state: SearchState
+  private setState: (state: SearchState) => void
+  public auth: AuthViewModel
 
-  constructor(initialState: SearchState, setState: (state: SearchState) => void, authViewModel: AuthViewModel) {
-    this.state = initialState;
-    this.setState = setState;
-    this.auth = authViewModel;
+  constructor(
+    initialState: SearchState,
+    setState: (state: SearchState) => void,
+    authViewModel: AuthViewModel
+  ) {
+    this.state = initialState
+    this.setState = setState
+    this.auth = authViewModel
   }
 
   // Getters
   get query() {
-    return this.state.query;
+    return this.state.query
   }
 
   get filters() {
-    return this.state.filters;
+    return this.state.filters
   }
 
   get results() {
-    return this.state.results;
+    return this.state.results
   }
 
   get isLoading() {
-    return this.state.isLoading;
+    return this.state.isLoading
   }
 
   get error() {
-    return this.state.error;
+    return this.state.error
   }
 
   get savedPapers() {
-    return this.state.savedPapers;
+    return this.state.savedPapers
   }
 
   get savingPapers() {
-    return this.state.savingPapers;
+    return this.state.savingPapers
   }
 
   get folders() {
-    return this.state.folders;
+    return this.state.folders
   }
 
   get isSelectingFolder() {
-    return this.state.isSelectingFolder;
+    return this.state.isSelectingFolder
   }
 
   get selectedPaperToSave() {
-    return this.state.selectedPaperToSave;
+    return this.state.selectedPaperToSave
   }
 
   get newFolderName() {
-    return this.state.newFolderName;
+    return this.state.newFolderName
   }
 
   // Actions
   setQuery = (query: string) => {
-    this.updateState({ query });
-  };
+    this.updateState({ query })
+  }
 
   performSearch = async () => {
-    if (!this.state.query.trim()) return;
-    
-    this.updateState({ isLoading: true, error: null });
+    if (!this.state.query.trim()) return
+
+    this.updateState({ isLoading: true, error: null })
 
     try {
-      const result = await this.searchPapersAPI(this.state.query, this.state.filters);
-      this.updateState({ results: result, isLoading: false });
+      const result = await this.searchPapersAPI(
+        this.state.query,
+        this.state.filters
+      )
+      this.updateState({ results: result, isLoading: false })
     } catch (error) {
       this.updateState({
-        error: error instanceof Error ? error.message : 'An error occurred during search',
+        error:
+          error instanceof Error
+            ? error.message
+            : 'An error occurred during search',
         isLoading: false,
-      });
+      })
     }
-  };
+  }
 
   setFilters = (filters: Partial<SearchFilters>) => {
-    const newFilters = { ...this.state.filters, ...filters };
-    this.updateState({ filters: newFilters });
-  };
+    const newFilters = { ...this.state.filters, ...filters }
+    this.updateState({ filters: newFilters })
+  }
 
   clearResults = () => {
-    this.updateState({ results: null, error: null });
-  };
+    this.updateState({ results: null, error: null })
+  }
 
   clearError = () => {
-    this.updateState({ error: null });
-  };
+    this.updateState({ error: null })
+  }
 
   loadSavedPaperIds = async () => {
     // Check if user is authenticated
     if (!this.auth.isAuthenticated) {
-      return;
+      return
     }
 
     try {
       // Load all saved papers to get their IDs
-      const savedPapers = await this.getSavedPapersAPI(1000, 0); // Get a large batch
-      
+      const savedPapers = await this.getSavedPapersAPI(1000, 0) // Get a large batch
+
       // Extract paper IDs and add to savedPapers set
-      const savedPaperIds = new Set<string>();
+      const savedPaperIds = new Set<string>()
       savedPapers.forEach(sp => {
-        savedPaperIds.add(sp.paper.id);
-      });
-      
-      this.updateState({ savedPapers: savedPaperIds });
+        savedPaperIds.add(sp.paper.id)
+      })
+
+      this.updateState({ savedPapers: savedPaperIds })
     } catch (error) {
       // Silently fail - not critical for search functionality
-      console.error('Failed to load saved paper IDs:', error);
+      console.error('Failed to load saved paper IDs:', error)
     }
-  };
+  }
 
   loadFolders = async () => {
     if (!this.auth.isAuthenticated) {
-      return;
+      return
     }
 
     try {
-      const folders = await this.getFoldersAPI();
-      this.updateState({ folders });
+      const folders = await this.getFoldersAPI()
+      this.updateState({ folders })
     } catch (error) {
-      console.error('Failed to load folders:', error);
+      console.error('Failed to load folders:', error)
     }
-  };
+  }
 
   openFolderSelection = (paperId: string) => {
-    this.updateState({ 
-      isSelectingFolder: true, 
+    this.updateState({
+      isSelectingFolder: true,
       selectedPaperToSave: paperId,
-      newFolderName: ''
-    });
-  };
+      newFolderName: '',
+    })
+  }
 
   closeFolderSelection = () => {
-    this.updateState({ 
-      isSelectingFolder: false, 
+    this.updateState({
+      isSelectingFolder: false,
       selectedPaperToSave: null,
-      newFolderName: ''
-    });
-  };
+      newFolderName: '',
+    })
+  }
 
   setNewFolderName = (name: string) => {
-    this.updateState({ newFolderName: name });
-  };
+    this.updateState({ newFolderName: name })
+  }
 
   createFolderAndSave = async () => {
     if (!this.state.newFolderName.trim() || !this.state.selectedPaperToSave) {
-      return;
+      return
     }
 
     try {
       // Create the folder
-      const newFolder = await this.createFolderAPI(this.state.newFolderName);
-      
+      const newFolder = await this.createFolderAPI(this.state.newFolderName)
+
       // Update folders list
-      this.updateState({ 
+      this.updateState({
         folders: [...this.state.folders, newFolder],
-        newFolderName: ''
-      });
-      
+        newFolderName: '',
+      })
+
       // Save paper to the new folder
-      await this.savePaperToFolder(this.state.selectedPaperToSave, newFolder.id);
+      await this.savePaperToFolder(this.state.selectedPaperToSave, newFolder.id)
     } catch (error) {
       this.updateState({
-        error: error instanceof Error ? error.message : 'Failed to create folder',
-      });
+        error:
+          error instanceof Error ? error.message : 'Failed to create folder',
+      })
     }
-  };
+  }
 
   savePaperToFolder = async (paperId: string, folderId: string | null) => {
-    const notes = '';
-    const tags: string[] = [];
-    
+    const notes = ''
+    const tags: string[] = []
+
     // Close the modal
-    this.closeFolderSelection();
-    
+    this.closeFolderSelection()
+
     // Add to saving state
-    const newSavingPapers = new Set(this.state.savingPapers);
-    newSavingPapers.add(paperId);
-    this.updateState({ savingPapers: newSavingPapers, error: null });
+    const newSavingPapers = new Set(this.state.savingPapers)
+    newSavingPapers.add(paperId)
+    this.updateState({ savingPapers: newSavingPapers, error: null })
 
     try {
       // First, save the paper (paperId is the Semantic Scholar paper ID)
-      const savedPaper = await this.savePaperAPI(paperId, notes, tags);
-      
+      const savedPaper = await this.savePaperAPI(paperId, notes, tags)
+
       // Then, if a folder was selected, move the paper to that folder
       // Use the savedPaper.paperId (the paper ID, not the saved_papers row ID)
       if (folderId) {
-        await this.movePaperToFolderAPI(savedPaper.paperId, folderId);
+        await this.movePaperToFolderAPI(savedPaper.paperId, folderId)
       }
-      
+
       // Add to saved papers and remove from saving
-      const newSavedPapers = new Set(this.state.savedPapers);
-      newSavedPapers.add(paperId);
-      const updatedSavingPapers = new Set(this.state.savingPapers);
-      updatedSavingPapers.delete(paperId);
-      
-      this.updateState({ 
+      const newSavedPapers = new Set(this.state.savedPapers)
+      newSavedPapers.add(paperId)
+      const updatedSavingPapers = new Set(this.state.savingPapers)
+      updatedSavingPapers.delete(paperId)
+
+      this.updateState({
         savedPapers: newSavedPapers,
-        savingPapers: updatedSavingPapers
-      });
-      
+        savingPapers: updatedSavingPapers,
+      })
+
       // Refresh folders to update counts
-      await this.loadFolders();
+      await this.loadFolders()
     } catch (error) {
       // Remove from saving state on error
-      const updatedSavingPapers = new Set(this.state.savingPapers);
-      updatedSavingPapers.delete(paperId);
-      
-      console.error('Error saving paper to folder:', error);
-      
+      const updatedSavingPapers = new Set(this.state.savingPapers)
+      updatedSavingPapers.delete(paperId)
+
+      console.error('Error saving paper to folder:', error)
+
       this.updateState({
         savingPapers: updatedSavingPapers,
-        error: error instanceof Error ? error.message : 'Failed to save paper'
-      });
+        error: error instanceof Error ? error.message : 'Failed to save paper',
+      })
     }
-  };
+  }
 
   savePaper = async (paperId: string) => {
     // Check if user is authenticated
     if (!this.auth.isAuthenticated) {
-      this.updateState({ error: 'Please log in to save papers' });
-      return;
+      this.updateState({ error: 'Please log in to save papers' })
+      return
     }
 
     // Check if paper is already saved
     if (this.state.savedPapers.has(paperId)) {
-      return; // Already saved
+      return // Already saved
     }
 
     // Open folder selection modal
-    this.openFolderSelection(paperId);
-  };
+    this.openFolderSelection(paperId)
+  }
 
   unsavePaper = async (paperId: string) => {
     // Check if user is authenticated
     if (!this.auth.isAuthenticated) {
-      this.updateState({ error: 'Please log in to manage papers' });
-      return;
+      this.updateState({ error: 'Please log in to manage papers' })
+      return
     }
 
     try {
-      await this.unsavePaperAPI(paperId);
-      
+      await this.unsavePaperAPI(paperId)
+
       // Remove from saved papers set
-      const newSavedPapers = new Set(this.state.savedPapers);
-      newSavedPapers.delete(paperId);
-      
-      this.updateState({ savedPapers: newSavedPapers });
-      
+      const newSavedPapers = new Set(this.state.savedPapers)
+      newSavedPapers.delete(paperId)
+
+      this.updateState({ savedPapers: newSavedPapers })
+
       // Refresh folders to update counts
-      await this.loadFolders();
+      await this.loadFolders()
     } catch (error) {
       this.updateState({
-        error: error instanceof Error ? error.message : 'Failed to unsave paper'
-      });
+        error:
+          error instanceof Error ? error.message : 'Failed to unsave paper',
+      })
     }
-  };
+  }
 
   private updateState = (partial: Partial<SearchState>) => {
-    this.state = { ...this.state, ...partial };
-    this.setState(this.state);
-  };
+    this.state = { ...this.state, ...partial }
+    this.setState(this.state)
+  }
 
   // Real GraphQL API call
-  private searchPapersAPI = async (query: string, filters: SearchFilters): Promise<SearchResult> => {
+  private searchPapersAPI = async (
+    query: string,
+    filters: SearchFilters
+  ): Promise<SearchResult> => {
     const variables = {
       query,
       limit: filters.limit || 10,
       offset: filters.offset || 0,
-    };
+    }
 
-    const response = await graphqlClient.request<{ searchPapers: SearchResult }>({
+    const response = await graphqlClient.request<{
+      searchPapers: SearchResult
+    }>({
       query: SEARCH_PAPERS,
       variables,
-    });
+    })
 
-    return response.searchPapers;
-  };
+    return response.searchPapers
+  }
 
-  private savePaperAPI = async (paperId: string, notes: string, tags: string[]): Promise<SavedPaper> => {
+  private savePaperAPI = async (
+    paperId: string,
+    notes: string,
+    tags: string[]
+  ): Promise<SavedPaper> => {
     const variables = {
       input: { paperId, notes, tags },
-    };
+    }
 
     const response = await graphqlClient.request<{ savePaper: SavedPaper }>({
       query: SAVE_PAPER,
       variables,
-    });
+    })
 
-    return response.savePaper;
-  };
+    return response.savePaper
+  }
 
   private unsavePaperAPI = async (paperId: string): Promise<boolean> => {
-    const variables = { paperId };
+    const variables = { paperId }
 
     const response = await graphqlClient.request<{ unsavePaper: boolean }>({
       query: UNSAVE_PAPER,
       variables,
-    });
+    })
 
-    return response.unsavePaper;
-  };
+    return response.unsavePaper
+  }
 
-  private getSavedPapersAPI = async (limit: number, offset: number): Promise<SavedPaper[]> => {
+  private getSavedPapersAPI = async (
+    limit: number,
+    offset: number
+  ): Promise<SavedPaper[]> => {
     const variables = {
       limit,
       offset,
-    };
+    }
 
-    const response = await graphqlClient.request<{ getSavedPapers: SavedPaper[] }>({
+    const response = await graphqlClient.request<{
+      getSavedPapers: SavedPaper[]
+    }>({
       query: GET_SAVED_PAPERS,
       variables,
-    });
+    })
 
-    return response.getSavedPapers;
-  };
+    return response.getSavedPapers
+  }
 
   private getFoldersAPI = async (): Promise<Folder[]> => {
     const response = await graphqlClient.request<{ getFolders: Folder[] }>({
       query: GET_FOLDERS,
-    });
+    })
 
-    return response.getFolders;
-  };
+    return response.getFolders
+  }
 
   private createFolderAPI = async (name: string): Promise<Folder> => {
     const variables = {
       input: { name },
-    };
+    }
 
     const response = await graphqlClient.request<{ createFolder: Folder }>({
       query: CREATE_FOLDER,
       variables,
-    });
+    })
 
-    return response.createFolder;
-  };
+    return response.createFolder
+  }
 
   private movePaperToFolderAPI = async (
     savedPaperId: string,
@@ -353,19 +393,21 @@ export class SearchViewModel {
     const variables = {
       paperId: savedPaperId,
       folderId,
-    };
+    }
 
-    const response = await graphqlClient.request<{ movePaperToFolder: SavedPaper }>({
+    const response = await graphqlClient.request<{
+      movePaperToFolder: SavedPaper
+    }>({
       query: MOVE_PAPER_TO_FOLDER,
       variables,
-    });
+    })
 
-    return response.movePaperToFolder;
-  };
+    return response.movePaperToFolder
+  }
 }
 
 export function useSearchViewModel() {
-  const authViewModel = useAuthViewModel();
+  const authViewModel = useAuthViewModel()
   const [state, setState] = useState<SearchState>({
     query: '',
     filters: {},
@@ -378,18 +420,18 @@ export function useSearchViewModel() {
     isSelectingFolder: false,
     selectedPaperToSave: null,
     newFolderName: '',
-  });
+  })
 
-  const viewModel = useRef(new SearchViewModel(state, setState, authViewModel));
-  viewModel.current = new SearchViewModel(state, setState, authViewModel);
+  const viewModel = useRef(new SearchViewModel(state, setState, authViewModel))
+  viewModel.current = new SearchViewModel(state, setState, authViewModel)
 
   // Auto-load saved paper IDs and folders when authenticated (MVVM compliant)
   useEffect(() => {
     if (authViewModel.isAuthenticated) {
-      viewModel.current.loadSavedPaperIds();
-      viewModel.current.loadFolders();
+      viewModel.current.loadSavedPaperIds()
+      viewModel.current.loadFolders()
     }
-  }, [authViewModel.isAuthenticated]);
+  }, [authViewModel.isAuthenticated])
 
-  return viewModel.current;
+  return viewModel.current
 }

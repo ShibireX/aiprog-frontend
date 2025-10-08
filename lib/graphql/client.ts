@@ -1,32 +1,31 @@
-
 interface GraphQLResponse<T> {
-  data?: T;
+  data?: T
   errors?: Array<{
-    message: string;
+    message: string
     locations?: Array<{
-      line: number;
-      column: number;
-    }>;
-    path?: string[];
-  }>;
+      line: number
+      column: number
+    }>
+    path?: string[]
+  }>
 }
 
 interface GraphQLRequest {
-  query: string;
-  variables?: Record<string, any>;
-  operationName?: string;
+  query: string
+  variables?: Record<string, any>
+  operationName?: string
 }
 
 class GraphQLClient {
-  private endpoint: string;
-  private headers: Record<string, string>;
+  private endpoint: string
+  private headers: Record<string, string>
 
   constructor(endpoint: string, headers: Record<string, string> = {}) {
-    this.endpoint = endpoint;
+    this.endpoint = endpoint
     this.headers = {
       'Content-Type': 'application/json',
       ...headers,
-    };
+    }
   }
 
   async request<T>(request: GraphQLRequest): Promise<T> {
@@ -35,43 +34,44 @@ class GraphQLClient {
         method: 'POST',
         headers: this.headers,
         body: JSON.stringify(request),
-      });
+      })
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
 
-      const result: GraphQLResponse<T> = await response.json();
+      const result: GraphQLResponse<T> = await response.json()
 
       if (result.errors && result.errors.length > 0) {
-        throw new Error(result.errors[0].message);
+        throw new Error(result.errors[0].message)
       }
 
       if (!result.data) {
-        throw new Error('No data returned from GraphQL endpoint');
+        throw new Error('No data returned from GraphQL endpoint')
       }
 
-      return result.data;
+      return result.data
     } catch (error) {
-      console.error('GraphQL request failed:', error);
-      throw error;
+      console.error('GraphQL request failed:', error)
+      throw error
     }
   }
 
   setAuthToken(token: string) {
-    this.headers['Authorization'] = `Bearer ${token}`;
+    this.headers['Authorization'] = `Bearer ${token}`
   }
 
   removeAuthToken() {
-    delete this.headers['Authorization'];
+    delete this.headers['Authorization']
   }
 }
 
 // Create a singleton instance
 const createGraphQLClient = () => {
-  const endpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql';
-  return new GraphQLClient(endpoint);
-};
+  const endpoint =
+    process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql'
+  return new GraphQLClient(endpoint)
+}
 
-export const graphqlClient = createGraphQLClient();
-export type { GraphQLRequest, GraphQLResponse };
+export const graphqlClient = createGraphQLClient()
+export type { GraphQLRequest, GraphQLResponse }
