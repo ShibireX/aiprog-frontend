@@ -10,17 +10,20 @@ interface ButtonProps {
 export function Button({ description, link = '/' }: ButtonProps) {
   return (
     <>
-    <Link className={cn(
+      <Link
+        className={cn(
           'flex h-12 w-24 items-center justify-center rounded-2xl',
-          'bg-gradient-to-br from-blue-500 to-blue-600 text-white font-medium',
+          'bg-gradient-to-br from-blue-500 to-blue-600 font-medium text-white',
           'shadow-lg transition-all duration-300',
           'group-hover:scale-105 group-hover:shadow-xl',
-          'hover:shadow-xl transition-all duration-500 ease-out',
-          'hover:transform hover:-translate-y-1',
+          'transition-all duration-500 ease-out hover:shadow-xl',
+          'hover:-translate-y-1 hover:transform',
           'm-4'
-        )} href={link}>{description}</Link>
-    
+        )}
+        href={link}
+      >
+        {description}
+      </Link>
     </>
-
   )
 }

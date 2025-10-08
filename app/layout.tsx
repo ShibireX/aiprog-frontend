@@ -8,7 +8,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Papr',
-  description: 'Discover and reference scientific publications with the power of AI. Search, store, and reference research papers like never before.',
+  description:
+    'Discover and reference scientific publications with the power of AI. Search, store, and reference research papers like never before.',
 }
 
 export default function RootLayout({

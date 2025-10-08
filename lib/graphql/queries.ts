@@ -31,7 +31,7 @@ export const SEARCH_PAPERS = `
       next
     }
   }
-`;
+`
 
 export const SAVE_PAPER = `
   mutation SavePaper($input: SavePaperInput!) {
@@ -59,13 +59,13 @@ export const SAVE_PAPER = `
       createdAt
     }
   }
-`;
+`
 
 export const UNSAVE_PAPER = `
   mutation UnsavePaper($paperId: String!) {
     unsavePaper(paperId: $paperId)
   }
-`;
+`
 
 export const REGISTER_USER = `
   mutation Register($input: RegisterInput!) {
@@ -81,7 +81,7 @@ export const REGISTER_USER = `
       }
     }
   }
-`;
+`
 
 export const LOGIN_USER = `
   mutation Login($input: LoginInput!) {
@@ -97,7 +97,7 @@ export const LOGIN_USER = `
       }
     }
   }
-`;
+`
 
 export const GET_CURRENT_USER = `
   query GetCurrentUser {
@@ -110,7 +110,7 @@ export const GET_CURRENT_USER = `
       updatedAt
     }
   }
-`;
+`
 
 export const GET_SAVED_PAPERS = `
   query GetSavedPapers($limit: Int = 10, $offset: Int = 0, $folderId: String) {
@@ -139,7 +139,7 @@ export const GET_SAVED_PAPERS = `
       createdAt
     }
   }
-`;
+`
 
 export const GET_FOLDERS = `
   query GetFolders {
@@ -151,7 +151,7 @@ export const GET_FOLDERS = `
       updatedAt
     }
   }
-`;
+`
 
 export const GET_FOLDER_WITH_PAPERS = `
   query GetFolderWithPapers($id: String!) {
@@ -179,7 +179,7 @@ export const GET_FOLDER_WITH_PAPERS = `
       }
     }
   }
-`;
+`
 
 export const CREATE_FOLDER = `
   mutation CreateFolder($input: CreateFolderInput!) {
@@ -191,7 +191,7 @@ export const CREATE_FOLDER = `
       updatedAt
     }
   }
-`;
+`
 
 export const UPDATE_FOLDER = `
   mutation UpdateFolder($id: String!, $input: UpdateFolderInput!) {
@@ -201,13 +201,13 @@ export const UPDATE_FOLDER = `
       updatedAt
     }
   }
-`;
+`
 
 export const DELETE_FOLDER = `
   mutation DeleteFolder($id: String!) {
     deleteFolder(id: $id)
   }
-`;
+`
 
 export const MOVE_PAPER_TO_FOLDER = `
   mutation MovePaperToFolder($paperId: String!, $folderId: String) {
@@ -220,9 +220,7 @@ export const MOVE_PAPER_TO_FOLDER = `
       }
     }
   }
-`;
-
-
+`
 
 export const GET_PUBLICATION_DETAILS = `
   query GetPublicationDetails($id: ID!) {
@@ -278,7 +276,7 @@ export const GET_PUBLICATION_DETAILS = `
       }
     }
   }
-`;
+`
 
 export const SEARCH_AUTHORS = `
   query SearchAuthors($query: String!, $limit: Int = 10) {
@@ -297,7 +295,7 @@ export const SEARCH_AUTHORS = `
       }
     }
   }
-`;
+`
 
 export const GET_TRENDING_TOPICS = `
   query GetTrendingTopics($timeframe: TimeframeInput = LAST_30_DAYS) {
@@ -312,27 +310,27 @@ export const GET_TRENDING_TOPICS = `
       }
     }
   }
-`;
+`
 
 // Input types for GraphQL mutations and queries
 export interface SearchFiltersInput {
   dateRange?: {
-    from: string;
-    to: string;
-  };
-  authors?: string[];
-  journals?: string[];
-  tags?: string[];
+    from: string
+    to: string
+  }
+  authors?: string[]
+  journals?: string[]
+  tags?: string[]
   citationRange?: {
-    min: number;
-    max?: number;
-  };
-  publicationType?: string[];
+    min: number
+    max?: number
+  }
+  publicationType?: string[]
 }
 
 export interface TimeframeInput {
-  LAST_7_DAYS: 'LAST_7_DAYS';
-  LAST_30_DAYS: 'LAST_30_DAYS';
-  LAST_90_DAYS: 'LAST_90_DAYS';
-  LAST_YEAR: 'LAST_YEAR';
+  LAST_7_DAYS: 'LAST_7_DAYS'
+  LAST_30_DAYS: 'LAST_30_DAYS'
+  LAST_90_DAYS: 'LAST_90_DAYS'
+  LAST_YEAR: 'LAST_YEAR'
 }
