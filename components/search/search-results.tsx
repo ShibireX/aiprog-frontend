@@ -1,64 +1,66 @@
-import { useState, useEffect } from 'react';
-import type { SearchResult, Paper } from '@/types/search';
-import type { SearchViewModel } from '@/lib/viewmodels/search-viewmodel';
-import { cn } from '@/lib/utils';
-import { Bookmark, BookmarkCheck, Loader } from 'lucide-react';
+import { useState, useEffect } from 'react'
+import type { SearchResult, Paper } from '@/types/search'
+import type { SearchViewModel } from '@/lib/viewmodels/search-viewmodel'
+import { cn } from '@/lib/utils'
+import { Bookmark, BookmarkCheck, Loader } from 'lucide-react'
 
 interface SearchResultsProps {
-  results: SearchResult;
-  searchViewModel: SearchViewModel;
-  onPaperClick?: (paper: Paper) => void;
+  results: SearchResult
+  searchViewModel: SearchViewModel
+  onPaperClick?: (paper: Paper) => void
 }
 
-export function SearchResults({ results, searchViewModel, onPaperClick }: SearchResultsProps) {
-  const [visibleCards, setVisibleCards] = useState<number[]>([]);
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+export function SearchResults({
+  results,
+  searchViewModel,
+  onPaperClick,
+}: SearchResultsProps) {
+  const [visibleCards, setVisibleCards] = useState<number[]>([])
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
 
   // Progressive fade-in animation
   useEffect(() => {
-    setVisibleCards([]); // Reset on new results
-    setExpandedCards(new Set()); // Reset expanded cards on new search
-    
+    setVisibleCards([]) // Reset on new results
+    setExpandedCards(new Set()) // Reset expanded cards on new search
+
     results.papers.forEach((_, index) => {
       setTimeout(() => {
-        setVisibleCards(prev => [...prev, index]);
-      }, index * 150); // 150ms delay between each card
-    });
-  }, [results]);
+        setVisibleCards(prev => [...prev, index])
+      }, index * 150) // 150ms delay between each card
+    })
+  }, [results])
 
   const handlePaperClick = (paper: Paper) => {
     if (onPaperClick) {
-      onPaperClick(paper);
+      onPaperClick(paper)
     } else if (paper.tldr) {
       // Toggle expansion for papers with TLDR
       setExpandedCards(prev => {
-        const newSet = new Set(prev);
+        const newSet = new Set(prev)
         if (newSet.has(paper.id)) {
-          newSet.delete(paper.id);
+          newSet.delete(paper.id)
         } else {
-          newSet.add(paper.id);
+          newSet.add(paper.id)
         }
-        return newSet;
-      });
+        return newSet
+      })
     } else if (paper.url) {
       // Fall back to opening URL if no TLDR
-      window.open(paper.url, '_blank', 'noopener,noreferrer');
+      window.open(paper.url, '_blank', 'noopener,noreferrer')
     }
-  };
+  }
 
-  const isExpanded = (paperId: string) => expandedCards.has(paperId);
+  const isExpanded = (paperId: string) => expandedCards.has(paperId)
 
   return (
     <div className="space-y-8">
       {/* Search Results Header */}
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-900">
-            Search Results
-          </h2>
-          <div className="flex items-center space-x-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-gray-700 font-medium">
+      <div className="mx-auto max-w-4xl">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-gray-900">Search Results</h2>
+          <div className="flex items-center space-x-2 rounded-full bg-white/70 px-4 py-2 shadow-lg backdrop-blur-sm">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
+            <span className="font-medium text-gray-700">
               {results.total} papers found
             </span>
           </div>
@@ -66,99 +68,116 @@ export function SearchResults({ results, searchViewModel, onPaperClick }: Search
       </div>
 
       {/* Search Result Cards */}
-      <div className="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
+      <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6">
         {results.papers.map((paper, index) => (
           <div
             key={paper.id}
             className={cn(
               'transform transition-all duration-700 ease-out',
               visibleCards.includes(index)
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-8 opacity-0'
             )}
             style={{
-              transitionDelay: visibleCards.includes(index) ? '0ms' : `${index * 150}ms`
+              transitionDelay: visibleCards.includes(index)
+                ? '0ms'
+                : `${index * 150}ms`,
             }}
           >
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 group hover:shadow-xl hover:bg-white/90 relative">
+            <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/90 hover:shadow-xl">
               {/* Save Button - Top Right */}
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
+                onClick={e => {
+                  e.stopPropagation()
                   if (searchViewModel.savedPapers.has(paper.id)) {
                     if (confirm('Remove this paper from your collection?')) {
-                      searchViewModel.unsavePaper(paper.id);
+                      searchViewModel.unsavePaper(paper.id)
                     }
                   } else {
-                    searchViewModel.savePaper(paper.id);
+                    searchViewModel.savePaper(paper.id)
                   }
                 }}
                 disabled={searchViewModel.savingPapers.has(paper.id)}
                 className={cn(
-                  "absolute top-4 right-4 z-10 p-2 rounded-full transition-all duration-200 shadow-md",
+                  'absolute right-4 top-4 z-10 rounded-full p-2 shadow-md transition-all duration-200',
                   searchViewModel.savedPapers.has(paper.id)
-                    ? "text-green-700 bg-green-100 border border-green-200"
-                    : "text-gray-600 hover:text-blue-600 bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-200"
+                    ? 'border border-green-200 bg-green-100 text-green-700'
+                    : 'border border-gray-200 bg-white text-gray-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600'
                 )}
-                title={searchViewModel.savedPapers.has(paper.id) ? "Saved" : "Save paper"}
+                title={
+                  searchViewModel.savedPapers.has(paper.id)
+                    ? 'Saved'
+                    : 'Save paper'
+                }
               >
                 {searchViewModel.savingPapers.has(paper.id) ? (
-                  <Loader className="w-5 h-5 animate-spin" />
+                  <Loader className="h-5 w-5 animate-spin" />
                 ) : searchViewModel.savedPapers.has(paper.id) ? (
-                  <BookmarkCheck className="w-5 h-5" />
+                  <BookmarkCheck className="h-5 w-5" />
                 ) : (
-                  <Bookmark className="w-5 h-5" />
+                  <Bookmark className="h-5 w-5" />
                 )}
               </button>
 
               <button
                 onClick={() => handlePaperClick(paper)}
-                className="w-full text-left p-6 pr-16 hover:scale-[1.01] transition-all duration-300"
+                className="w-full p-6 pr-16 text-left transition-all duration-300 hover:scale-[1.01]"
               >
                 <div className="space-y-4">
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-900 transition-colors leading-tight">
+                  <h3 className="text-xl font-bold leading-tight text-gray-900 transition-colors group-hover:text-blue-900">
                     {paper.title}
                   </h3>
 
                   {/* Authors */}
-                  <p className="text-gray-600 font-medium text-base">
+                  <p className="text-base font-medium text-gray-600">
                     {paper.authors.join(', ')}
                   </p>
 
                   {/* Metadata Tags */}
-                  <div className="flex items-center flex-wrap gap-2 pt-2">
+                  <div className="flex flex-wrap items-center gap-2 pt-2">
                     {paper.year && (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                      <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">
                         {paper.year}
                       </span>
                     )}
                     {paper.venue && (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
                         {paper.venue}
                       </span>
                     )}
                     {paper.citationCount !== undefined && (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
                         {paper.citationCount} citations
                       </span>
                     )}
-                    
+
                     {/* Click indicator */}
-                    <div className="ml-auto flex items-center space-x-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                    <div className="ml-auto flex items-center space-x-2 opacity-60 transition-opacity group-hover:opacity-100">
                       <span className="text-sm text-gray-500">
-                        {paper.tldr ? (isExpanded(paper.id) ? 'Click to collapse' : 'Click for summary') : 'Click to view'}
+                        {paper.tldr
+                          ? isExpanded(paper.id)
+                            ? 'Click to collapse'
+                            : 'Click for summary'
+                          : 'Click to view'}
                       </span>
-                      <svg 
+                      <svg
                         className={cn(
-                          "w-4 h-4 text-gray-400 transition-transform duration-300",
-                          paper.tldr && isExpanded(paper.id) ? "rotate-90" : "group-hover:translate-x-1"
-                        )} 
-                        fill="none" 
-                        stroke="currentColor" 
+                          'h-4 w-4 text-gray-400 transition-transform duration-300',
+                          paper.tldr && isExpanded(paper.id)
+                            ? 'rotate-90'
+                            : 'group-hover:translate-x-1'
+                        )}
+                        fill="none"
+                        stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -167,39 +186,67 @@ export function SearchResults({ results, searchViewModel, onPaperClick }: Search
 
               {/* Expandable TLDR Section */}
               {paper.tldr && (
-                <div className={cn(
-                  "overflow-hidden transition-all duration-500 ease-in-out",
-                  isExpanded(paper.id) ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
-                )}>
-                  <div className="px-6 pb-6 pt-2 border-t border-gray-100">
+                <div
+                  className={cn(
+                    'overflow-hidden transition-all duration-500 ease-in-out',
+                    isExpanded(paper.id)
+                      ? 'max-h-[1000px] opacity-100'
+                      : 'max-h-0 opacity-0'
+                  )}
+                >
+                  <div className="border-t border-gray-100 px-6 pb-6 pt-2">
                     <div className="space-y-6">
                       {/* TLDR Section - First */}
-                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
-                        <div className="flex items-center space-x-3 mb-3">
-                          <div className="flex items-center justify-center w-8 h-8 bg-blue-500 rounded-full">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      <div className="rounded-xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-5">
+                        <div className="mb-3 flex items-center space-x-3">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+                            <svg
+                              className="h-4 w-4 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13 10V3L4 14h7v7l9-11h-7z"
+                              />
                             </svg>
                           </div>
-                          <h4 className="font-semibold text-blue-900 text-lg">TL;DR Summary</h4>
+                          <h4 className="text-lg font-semibold text-blue-900">
+                            TL;DR Summary
+                          </h4>
                         </div>
-                        <p className="text-gray-800 leading-relaxed text-base pl-11">
+                        <p className="pl-11 text-base leading-relaxed text-gray-800">
                           {paper.tldr.text}
                         </p>
                       </div>
-                      
+
                       {/* Abstract Section - Second */}
                       {paper.abstract && (
-                        <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                          <div className="flex items-center space-x-3 mb-3">
-                            <div className="flex items-center justify-center w-8 h-8 bg-gray-500 rounded-full">
-                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                          <div className="mb-3 flex items-center space-x-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
+                              <svg
+                                className="h-4 w-4 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
                               </svg>
                             </div>
-                            <h4 className="font-semibold text-gray-900 text-lg">Abstract</h4>
+                            <h4 className="text-lg font-semibold text-gray-900">
+                              Abstract
+                            </h4>
                           </div>
-                          <p className="text-gray-700 leading-relaxed text-base pl-11">
+                          <p className="pl-11 text-base leading-relaxed text-gray-700">
                             {paper.abstract}
                           </p>
                         </div>
@@ -210,12 +257,22 @@ export function SearchResults({ results, searchViewModel, onPaperClick }: Search
                             href={paper.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center space-x-2 font-medium text-blue-600 transition-colors hover:text-blue-800"
+                            onClick={e => e.stopPropagation()}
                           >
                             <span>Read full paper</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            <svg
+                              className="h-4 w-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                              />
                             </svg>
                           </a>
                         </div>
@@ -231,14 +288,17 @@ export function SearchResults({ results, searchViewModel, onPaperClick }: Search
 
       {/* Load More Indicator */}
       {results.next && (
-        <div className="text-center pt-8">
+        <div className="pt-8 text-center">
           <div className="inline-flex items-center space-x-2 text-gray-500">
-            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse"></div>
+            <div className="h-1 w-1 animate-pulse rounded-full bg-gray-400"></div>
             <span className="text-sm">More results available</span>
-            <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+            <div
+              className="h-1 w-1 animate-pulse rounded-full bg-gray-400"
+              style={{ animationDelay: '0.5s' }}
+            ></div>
           </div>
         </div>
       )}
     </div>
-  );
+  )
 }
