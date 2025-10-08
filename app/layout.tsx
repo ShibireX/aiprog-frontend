@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { ViewModelProvider } from '@/lib/viewmodels/viewmodel-provider'
 
 import './globals.css'
 
@@ -18,9 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="min-h-screen bg-background font-sans antialiased">
-          <main>{children}</main>
-        </div>
+        <ViewModelProvider>
+          <div className="min-h-screen bg-background font-sans antialiased">
+            <main>{children}</main>
+          </div>
+        </ViewModelProvider>
       </body>
     </html>
   )

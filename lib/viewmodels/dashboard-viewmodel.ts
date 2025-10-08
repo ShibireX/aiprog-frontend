@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
 import type { DashboardState, DashboardFilters } from '@/types/dashboard';
 import type { SavedPaper, Folder } from '@/types/search';
 import { graphqlClient } from '@/lib/graphql/client';
@@ -13,7 +12,7 @@ import {
   MOVE_PAPER_TO_FOLDER,
   UNSAVE_PAPER
 } from '@/lib/graphql/queries';
-import { useAuthViewModel, type AuthViewModel } from './auth-viewmodel';
+import type { AuthViewModel } from './auth-viewmodel';
 
 export class DashboardViewModel {
   private state: DashboardState;
@@ -422,35 +421,6 @@ export class DashboardViewModel {
   };
 }
 
-export function useDashboardViewModel() {
-  const authViewModel = useAuthViewModel();
-  const [state, setState] = useState<DashboardState>({
-    folders: [],
-    savedPapers: [],
-    uncategorizedCount: 0,
-    isLoading: false,
-    isLoadingFolders: false,
-    error: null,
-    filters: {
-      limit: 10,
-      offset: 0,
-      selectedFolderId: null, // Default to "All" (no folder filter)
-    },
-    hasMore: false,
-    isAddMapOpen: false,
-    newMapName: '',
-  });
-
-  const viewModel = useRef(new DashboardViewModel(state, setState, authViewModel));
-  viewModel.current = new DashboardViewModel(state, setState, authViewModel);
-
-  // Auto-load folders and papers when authenticated (MVVM compliant)
-  useEffect(() => {
-    if (authViewModel.isAuthenticated) {
-      viewModel.current.loadFolders();
-      viewModel.current.loadSavedPapers(true);
-    }
-  }, [authViewModel.isAuthenticated]);
-
-  return viewModel.current;
-}
+// Hook for React - now exported from viewmodel-provider
+// This is kept here for backward compatibility but re-exports from the provider
+export { useDashboardViewModel } from './viewmodel-provider';
