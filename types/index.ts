@@ -36,5 +36,5 @@ export type {
   Paper,
   SearchFilters,
   SearchResult,
-  SearchState
-} from './search';
+  SearchState,
+} from './search'

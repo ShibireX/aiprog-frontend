@@ -3,9 +3,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-    plugins: [react()],
-    test: {
-        environment: 'node', // 'jsdom' if rendering components, might need later
-        globals: true
-    },
+  plugins: [react()],
+  test: {
+    environment: 'node', // 'jsdom' if rendering components, might need later
+    globals: true,
+  },
 })

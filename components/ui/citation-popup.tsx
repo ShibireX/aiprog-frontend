@@ -27,52 +27,66 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
   }
 
   return (
-    <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
       onClick={citationViewModel.closePopup}
     >
-      <div 
-        className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
+      <div
+        className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between border-b border-gray-200 p-6">
           <div className="flex items-center gap-3">
             <FileText className="h-6 w-6 text-blue-600" />
             <h2 className="text-2xl font-semibold text-gray-900">
-              {citationViewModel.selectedPapers.length === 1 ? 'Citation' : 'Bulk Citations'}
+              {citationViewModel.selectedPapers.length === 1
+                ? 'Citation'
+                : 'Bulk Citations'}
             </h2>
             <span className="text-gray-500">
-              ({citationViewModel.selectedPapers.length} {citationViewModel.selectedPapers.length === 1 ? 'paper' : 'papers'})
+              ({citationViewModel.selectedPapers.length}{' '}
+              {citationViewModel.selectedPapers.length === 1
+                ? 'paper'
+                : 'papers'}
+              )
             </span>
           </div>
           <button
             onClick={citationViewModel.closePopup}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="rounded-full p-2 transition-colors hover:bg-gray-100"
           >
             <X className="h-5 w-5 text-gray-500" />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="max-h-[calc(90vh-120px)] overflow-y-auto p-6">
           {/* Format Selection */}
           <div className="mb-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Select Citation Format</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {citationViewModel.availableFormats.map((format) => (
+            <h3 className="mb-4 text-lg font-medium text-gray-900">
+              Select Citation Format
+            </h3>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {citationViewModel.availableFormats.map(format => (
                 <button
                   key={format.id}
                   onClick={() => citationViewModel.setFormat(format.id)}
                   className={cn(
-                    "p-4 rounded-lg border-2 text-left transition-all duration-200",
+                    'rounded-lg border-2 p-4 text-left transition-all duration-200',
                     citationViewModel.selectedFormat === format.id
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   )}
                 >
-                  <div className="font-medium text-gray-900 mb-1">{format.name}</div>
-                  <div className="text-sm text-gray-600 mb-2">{format.description}</div>
-                  <div className="text-xs text-gray-500 italic">{format.example}</div>
+                  <div className="mb-1 font-medium text-gray-900">
+                    {format.name}
+                  </div>
+                  <div className="mb-2 text-sm text-gray-600">
+                    {format.description}
+                  </div>
+                  <div className="text-xs italic text-gray-500">
+                    {format.example}
+                  </div>
                 </button>
               ))}
             </div>
@@ -83,7 +97,7 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
             <button
               onClick={handleGenerate}
               disabled={citationViewModel.isGenerating}
-              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mx-auto"
+              className="mx-auto flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {citationViewModel.isGenerating ? (
                 <>
@@ -103,14 +117,16 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
           {citationViewModel.generatedCitations && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium text-gray-900">Generated Citations</h3>
+                <h3 className="text-lg font-medium text-gray-900">
+                  Generated Citations
+                </h3>
                 <button
                   onClick={handleCopy}
                   className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200",
+                    'flex items-center gap-2 rounded-lg px-4 py-2 transition-all duration-200',
                     copySuccess
-                      ? "bg-green-100 text-green-700 border border-green-200"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
+                      ? 'border border-green-200 bg-green-100 text-green-700'
+                      : 'border border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
                   )}
                 >
                   {copySuccess ? (
@@ -126,15 +142,21 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
                   )}
                 </button>
               </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <pre className="whitespace-pre-wrap text-sm text-gray-800 font-mono leading-relaxed">
+
+              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-800">
                   {citationViewModel.generatedCitations}
                 </pre>
               </div>
 
-              <div className="text-xs text-gray-500 text-center">
-                Citations generated in {citationViewModel.availableFormats.find(f => f.id === citationViewModel.selectedFormat)?.name} format
+              <div className="text-center text-xs text-gray-500">
+                Citations generated in{' '}
+                {
+                  citationViewModel.availableFormats.find(
+                    f => f.id === citationViewModel.selectedFormat
+                  )?.name
+                }{' '}
+                format
               </div>
             </div>
           )}
