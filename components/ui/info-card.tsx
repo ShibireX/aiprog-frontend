@@ -16,8 +16,8 @@ export function InfoCard({
   return (
     <div
       className={cn(
-        'group rounded-3xl border-0 bg-white/40 p-8 shadow-lg backdrop-blur-sm',
-        'transition-all duration-500 ease-out hover:bg-white/60 hover:shadow-xl',
+        'group rounded-3xl border-0 bg-white/40 dark:bg-slate-800/40 p-8 shadow-lg backdrop-blur-sm',
+        'transition-all duration-500 ease-out hover:bg-white/60 dark:hover:bg-slate-800/70 hover:shadow-xl',
         'hover:-translate-y-1 hover:transform',
         className
       )}
@@ -29,10 +29,10 @@ export function InfoCard({
           </div>
         </div>
         <div>
-          <h3 className="mb-3 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-900">
+          <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-gray-200 transition-colors group-hover:text-blue-900">
             {title}
           </h3>
-          <p className="text-base leading-relaxed text-gray-600">
+          <p className="text-base leading-relaxed text-gray-600 dark:text-gray-300">
             {description}
           </p>
         </div>

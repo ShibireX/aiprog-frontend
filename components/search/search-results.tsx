@@ -60,7 +60,7 @@ export function SearchResults({
           <h2 className="text-3xl font-bold text-gray-900">Search Results</h2>
           <div className="flex items-center space-x-2 rounded-full bg-white/70 px-4 py-2 shadow-lg backdrop-blur-sm">
             <div className="h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
-            <span className="font-medium text-gray-700">
+            <span className="font-medium text-gray-700 dark:text-gray-200">
               {results.total} papers found
             </span>
           </div>
@@ -102,7 +102,7 @@ export function SearchResults({
                   'absolute right-4 top-4 z-10 rounded-full p-2 shadow-md transition-all duration-200',
                   searchViewModel.savedPapers.has(paper.id)
                     ? 'border border-green-200 bg-green-100 text-green-700'
-                    : 'border border-gray-200 bg-white text-gray-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600'
+                    : 'border border-gray-200 bg-white text-gray-600 dark:text-gray-300 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600'
                 )}
                 title={
                   searchViewModel.savedPapers.has(paper.id)
@@ -130,7 +130,7 @@ export function SearchResults({
                   </h3>
 
                   {/* Authors */}
-                  <p className="text-base font-medium text-gray-600">
+                  <p className="text-base font-medium text-gray-600 dark:text-gray-300">
                     {paper.authors.join(', ')}
                   </p>
 
@@ -246,7 +246,7 @@ export function SearchResults({
                               Abstract
                             </h4>
                           </div>
-                          <p className="pl-11 text-base leading-relaxed text-gray-700">
+                          <p className="pl-11 text-base leading-relaxed text-gray-700 dark:text-gray-200">
                             {paper.abstract}
                           </p>
                         </div>

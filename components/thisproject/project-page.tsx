@@ -31,7 +31,7 @@ export function ProjectView() {
             <div className="mb-12 text-center">
               <div className="mb-6">
                 <a href="/">
-                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
+                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent dark:text-gray-200 sm:text-7xl">
                     [ Papr ]
                   </h1>
                 </a>
@@ -44,18 +44,18 @@ export function ProjectView() {
           <div className="mx-auto max-w-7xl px-4 py-8 sm:px-4 lg:px-8">
             <section className="pb-24">
               <div className="pb-6 text-center lg:pb-8">
-                <h2 className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700">
+                <h2 className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700 dark:text-gray-200">
                   About this project
                 </h2>
               </div>
               <div className="pb-4 text-center lg:pb-6">
-                <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600">
+                <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
                   <i>Papr</i> was built as a course project at KTH in Sweden to
                   demonstrate skills in advnced interaction programming.
                 </p>
               </div>
               <div className="pb-4 text-center lg:pb-6">
-                <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600">
+                <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
                   The tech stack we are using consist of a React with Next
                   frontend utilizing Tailwind for styling, and a Fastify with
                   GraphQL, Mercurius and SQLite backend. All written in

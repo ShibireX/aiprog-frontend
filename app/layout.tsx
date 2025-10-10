@@ -18,9 +18,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className={inter.className}>
-        <div className="min-h-screen font-sans antialiased bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
+        <div className="min-h-screen bg-indigo-50/50 font-sans antialiased dark:bg-slate-900">
           <main>
             {children}
             <FooterView />

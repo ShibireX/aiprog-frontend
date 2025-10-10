@@ -28,7 +28,7 @@ export function AuthView() {
           <h3 className="mb-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-900">
             {vm.mode === 'signup' ? 'Create an Account' : 'Welcome Back'}
           </h3>
-          <p className="text-base leading-relaxed text-gray-600">
+          <p className="text-base leading-relaxed text-gray-600 dark:text-gray-300">
             {vm.mode === 'signup'
               ? 'Sign up to get started with Papr!'
               : 'Sign in to continue to Papr!'}
