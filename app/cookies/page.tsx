@@ -1,5 +1,5 @@
-import { CookiesView } from '@/components/cookies/cookies-view'
+import { CookiesPage } from '@/components/cookies/cookies-page'
 
 export default function CookiesPage() {
-  return <CookiesView />
+  return <CookiesPage />
 }
