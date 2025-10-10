@@ -11,7 +11,7 @@ export function LinkSmall({ content, href, className }: LinkSmallProps) {
     <a
       href={href}
       className={cn(
-        'font-semibold leading-relaxed text-gray-700 underline hover:text-blue-700',
+        'font-semibold leading-relaxed text-gray-700 underline hover:text-blue-700 dark:text-gray-200',
         className
       )}
     >

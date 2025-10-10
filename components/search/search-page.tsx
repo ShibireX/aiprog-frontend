@@ -34,11 +34,11 @@ export function SearchPage() {
           <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="mb-12 text-center">
               <div className="mb-6">
-                <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
+                <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent dark:text-gray-200 sm:text-7xl">
                   [ Papr ]
                 </h1>
               </div>
-              <p className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700">
+              <p className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700 dark:text-gray-200 dark:text-gray-300">
                 Your personal research library and citation assistant
               </p>
             </div>
@@ -71,10 +71,10 @@ export function SearchPage() {
             <div className="space-y-16">
               {/* About Papr Section */}
               <div className="text-center">
-                <h2 className="mb-6 text-3xl font-bold text-gray-900">
+                <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-200">
                   Streamline Your Academic Research
                 </h2>
-                <p className="mx-auto max-w-4xl text-xl font-light leading-relaxed text-gray-600">
+                <p className="mx-auto max-w-4xl text-xl font-light leading-relaxed text-gray-600 dark:text-gray-300">
                   Search millions of academic papers, save your favorites to
                   organized folders, and generate citations instantly.
                   Everything you need to manage your research in one place.
