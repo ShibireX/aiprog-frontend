@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/ui/user-avatar'
 import { AnimatePresence, motion } from 'framer-motion'
 
-export function CookiesView() {
+export function CookiesPage() {
   const searchViewModel = useSearchViewModel()
 
   return (
@@ -16,7 +16,7 @@ export function CookiesView() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 p-4"
+        className="min-h-screen p-4"
       >
         {/* Header Section */}
         <div className="relative">
@@ -30,9 +30,11 @@ export function CookiesView() {
           <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="mb-12 text-center">
               <div className="mb-6">
-                <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
-                  [ Papr ]
-                </h1>
+                <a href='/'>
+                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
+                    [ Papr ]
+                  </h1>
+                </a>
               </div>
             </div>
           </div>
