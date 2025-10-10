@@ -20,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="min-h-screen bg-background font-sans antialiased">
-          <main>{children}</main>
-          <FooterView />
+        <div className="min-h-screen font-sans antialiased bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
+          <main>
+            {children}
+            <FooterView />
+          </main>
         </div>
       </body>
     </html>
