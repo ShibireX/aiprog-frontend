@@ -55,7 +55,7 @@ export function DashboardView() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 p-4"
+        className="min-h-screen p-4"
       >
         {/* Background Pattern */}
         <div

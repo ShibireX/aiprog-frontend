@@ -8,7 +8,7 @@ export function AuthView() {
   const vm = useAuthFormViewModel()
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <div
         className={cn(
           'group rounded-3xl border-0 bg-white/40 p-8 shadow-lg backdrop-blur-sm',
