@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/ui/user-avatar'
 import { AnimatePresence, motion } from 'framer-motion'
 
-export function CookiesPage() {
+export function CookiesView() {
   const searchViewModel = useSearchViewModel()
 
   return (
@@ -30,7 +30,7 @@ export function CookiesPage() {
           <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="mb-12 text-center">
               <div className="mb-6">
-                <a href='/'>
+                <a href="/">
                   <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
                     [ Papr ]
                   </h1>
