@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
 import type {
   SearchState,
   SearchFilters,
@@ -18,7 +17,7 @@ import {
   CREATE_FOLDER,
   MOVE_PAPER_TO_FOLDER,
 } from '@/lib/graphql/queries'
-import { useAuthViewModel, type AuthViewModel } from './auth-viewmodel'
+import type { AuthViewModel } from './auth-viewmodel'
 
 export class SearchViewModel {
   private state: SearchState
@@ -406,32 +405,6 @@ export class SearchViewModel {
   }
 }
 
-export function useSearchViewModel() {
-  const authViewModel = useAuthViewModel()
-  const [state, setState] = useState<SearchState>({
-    query: '',
-    filters: {},
-    results: null,
-    isLoading: false,
-    error: null,
-    savedPapers: new Set<string>(),
-    savingPapers: new Set<string>(),
-    folders: [],
-    isSelectingFolder: false,
-    selectedPaperToSave: null,
-    newFolderName: '',
-  })
-
-  const viewModel = useRef(new SearchViewModel(state, setState, authViewModel))
-  viewModel.current = new SearchViewModel(state, setState, authViewModel)
-
-  // Auto-load saved paper IDs and folders when authenticated (MVVM compliant)
-  useEffect(() => {
-    if (authViewModel.isAuthenticated) {
-      viewModel.current.loadSavedPaperIds()
-      viewModel.current.loadFolders()
-    }
-  }, [authViewModel.isAuthenticated])
-
-  return viewModel.current
-}
+// Hook for React - now exported from viewmodel-provider
+// This is kept here for backward compatibility but re-exports from the provider
+export { useSearchViewModel } from './viewmodel-provider'

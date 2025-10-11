@@ -31,7 +31,7 @@ export function ProjectView() {
             <div className="mb-12 text-center">
               <div className="mb-6">
                 <a href="/">
-                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent dark:text-gray-200 sm:text-7xl">
+                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl dark:text-gray-200">
                     [ Papr ]
                   </h1>
                 </a>

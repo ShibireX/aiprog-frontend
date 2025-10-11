@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { FooterView } from '@/components/footer/footer-view'
+import { ViewModelProvider } from '@/lib/viewmodels/viewmodel-provider'
 
 import './globals.css'
 
@@ -20,12 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>
-        <div className="min-h-screen bg-indigo-50/50 font-sans antialiased dark:bg-slate-900">
-          <main>
-            {children}
-            <FooterView />
-          </main>
-        </div>
+        <ViewModelProvider>
+          <div className="min-h-screen bg-background font-sans antialiased">
+            <main>
+              {children}
+              <FooterView />
+            </main>
+          </div>
+        </ViewModelProvider>
       </body>
     </html>
   )

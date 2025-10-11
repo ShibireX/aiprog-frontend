@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
 import type { User } from '@/types'
 import { getAuthState, logout as logoutUtil, validateToken } from '@/lib/auth'
 
@@ -157,23 +156,6 @@ export class AuthViewModel {
   }
 }
 
-// Hook for React
-export function useAuthViewModel() {
-  const [state, setState] = useState<AuthState>({
-    isAuthenticated: false,
-    user: null,
-    token: null,
-    isUploadingThumbnail: false,
-    uploadError: null,
-  })
-
-  const viewModel = useRef(new AuthViewModel(state, setState))
-  viewModel.current = new AuthViewModel(state, setState)
-
-  // Check auth status on mount
-  useEffect(() => {
-    viewModel.current.checkAuthStatus()
-  }, [])
-
-  return viewModel.current
-}
+// Hook for React - now exported from viewmodel-provider
+// This is kept here for backward compatibility but re-exports from the provider
+export { useAuthViewModel } from './viewmodel-provider'
