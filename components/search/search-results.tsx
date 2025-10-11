@@ -102,7 +102,7 @@ export function SearchResults({
                   'absolute right-4 top-4 z-10 rounded-full p-2 shadow-md transition-all duration-200',
                   searchViewModel.savedPapers.has(paper.id)
                     ? 'border border-green-200 bg-green-100 text-green-700'
-                    : 'border border-gray-200 bg-white text-gray-600 dark:text-gray-300 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600'
+                    : 'border border-gray-200 bg-white text-gray-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300'
                 )}
                 title={
                   searchViewModel.savedPapers.has(paper.id)

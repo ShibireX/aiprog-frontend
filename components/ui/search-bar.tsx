@@ -85,7 +85,7 @@ export function SearchBar({
     <div className={cn('relative mx-auto w-full max-w-3xl', className)}>
       <div
         className={cn(
-          'relative flex items-center rounded-2xl border border-white/20 bg-white/80 dark:bg-slate-800/80 shadow-xl backdrop-blur-sm transition-all duration-300',
+          'relative flex items-center rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-sm transition-all duration-300 dark:bg-slate-800/80',
           isFocused
             ? 'bg-white/90 shadow-2xl ring-1 ring-blue-500/30'
             : 'shadow-lg',

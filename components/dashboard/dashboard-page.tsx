@@ -55,7 +55,7 @@ export function DashboardView() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="min-h-screen p-4"
+        className="min-h-screen from-slate-50 via-blue-50/30 to-indigo-50/50 p-4"
       >
         {/* Background Pattern */}
         <div
@@ -260,7 +260,7 @@ export function DashboardView() {
 
             {/* Papers Grid */}
             {dashboardViewModel.filteredSavedPapers.length > 0 && (
-              <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-1 gap-6 pb-8">
                 {dashboardViewModel.filteredSavedPapers.map(savedPaper => (
                   <div
                     key={savedPaper.id}
@@ -332,12 +332,6 @@ export function DashboardView() {
                               {savedPaper.paper.citationCount} citations
                             </span>
                           )}
-                          <span className="ml-auto text-xs text-gray-500">
-                            Saved{' '}
-                            {new Date(
-                              savedPaper.createdAt
-                            ).toLocaleDateString()}
-                          </span>
                         </div>
                       </div>
                     </div>
