@@ -4,7 +4,7 @@ export function FooterView() {
   return (
     <footer className="flex flex-col items-center justify-center gap-16 px-16 py-32 md:flex-row md:items-start lg:gap-32">
       <section className="flex max-w-48 flex-col items-center justify-center gap-6 text-center">
-        <h3 className="font-semibold leading-relaxed text-gray-600 md:text-lg md:font-normal dark:text-gray-300">
+        <h3 className="font-semibold leading-relaxed text-gray-600 dark:text-gray-300 md:text-lg md:font-normal">
           This project
         </h3>
         <p className="leading-relaxed text-gray-700 dark:text-gray-200">
@@ -14,7 +14,7 @@ export function FooterView() {
         </p>
       </section>
       <section className="flex max-w-48 flex-col items-center justify-center gap-6 text-center">
-        <h3 className="font-semibold leading-relaxed text-gray-600 md:text-lg md:font-normal dark:text-gray-300">
+        <h3 className="font-semibold leading-relaxed text-gray-600 dark:text-gray-300 md:text-lg md:font-normal">
           About us
         </h3>
         <p className="leading-relaxed text-gray-700 dark:text-gray-200">
@@ -24,7 +24,7 @@ export function FooterView() {
         </p>
       </section>
       <section className="flex max-w-48 flex-col items-center justify-center gap-6 text-center">
-        <h3 className="font-semibold leading-relaxed text-gray-600 md:text-lg md:font-normal dark:text-gray-300">
+        <h3 className="font-semibold leading-relaxed text-gray-600 dark:text-gray-300 md:text-lg md:font-normal">
           Cookies
         </h3>
         <p className="leading-relaxed text-gray-700 dark:text-gray-200">

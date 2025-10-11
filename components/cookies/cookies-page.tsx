@@ -4,6 +4,7 @@ import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/ui/user-avatar'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ThemeSwitch } from '../ui/theme-switch'
 
 export function CookiesView() {
   const searchViewModel = useSearchViewModel()
@@ -22,7 +23,10 @@ export function CookiesView() {
         <div className="relative">
           <div className="flex flex-row place-items-end justify-end p-4 px-4">
             {searchViewModel.auth.isAuthenticated ? (
-              <UserAvatar />
+              <div>
+                <UserAvatar />
+                <ThemeSwitch />
+              </div>
             ) : (
               <Button description="Sign up" link="/signup" />
             )}
@@ -31,7 +35,7 @@ export function CookiesView() {
             <div className="mb-12 text-center">
               <div className="mb-6">
                 <a href="/">
-                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl dark:text-gray-200">
+                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent dark:text-gray-200 sm:text-7xl">
                     [ Papr ]
                   </h1>
                 </a>
@@ -59,7 +63,9 @@ export function CookiesView() {
               <div className="pb-4 text-center lg:pb-6">
                 <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
                   We use cookies to enhance your experience on our site, to make
-                  your life more convenient next time you visit us.
+                  your life more convenient next time you visit us. By signing
+                  up or logging in, you accept the usage of necessary and
+                  functional cookies.
                 </p>
               </div>
             </section>

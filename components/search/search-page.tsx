@@ -8,6 +8,7 @@ import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/ui/user-avatar'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ThemeSwitch } from '../ui/theme-switch'
 
 export function SearchPage() {
   const searchViewModel = useSearchViewModel()
@@ -26,7 +27,10 @@ export function SearchPage() {
         <div className="relative">
           <div className="flex flex-row place-items-end justify-end p-4 px-4">
             {searchViewModel.auth.isAuthenticated ? (
-              <UserAvatar />
+              <div>
+                <UserAvatar />
+                <ThemeSwitch />
+              </div>
             ) : (
               <Button description="Sign up" link="/signup" />
             )}
@@ -34,7 +38,7 @@ export function SearchPage() {
           <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="mb-12 text-center">
               <div className="mb-6">
-                <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl dark:text-gray-200">
+                <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent dark:text-gray-200 sm:text-7xl">
                   [ Papr ]
                 </h1>
               </div>

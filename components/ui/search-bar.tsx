@@ -97,7 +97,7 @@ export function SearchBar({
             className={cn(
               'h-6 w-6 transition-all duration-300',
               isFocused ? 'scale-110 text-blue-600' : 'text-gray-400',
-              isFocused ? 'dark:text-blue-300' : 'dark:text-gray-500'
+              isFocused ? 'scale-110 dark:text-blue-300' : 'dark:text-gray-700'
             )}
             fill="none"
             stroke="currentColor"
@@ -144,7 +144,7 @@ export function SearchBar({
           {value && !isLoading && (
             <button
               onClick={() => onChange('')}
-              className="text-gray-400 transition-all duration-200 hover:scale-110 hover:text-gray-600"
+              className="text-gray-400 transition-all duration-200 hover:scale-110 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-300"
               type="button"
             >
               <svg
