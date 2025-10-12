@@ -8,7 +8,7 @@ export function AuthView() {
   const vm = useAuthFormViewModel()
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <div
         className={cn(
           'group rounded-3xl border-0 bg-white/40 p-8 shadow-lg backdrop-blur-sm',
@@ -28,7 +28,7 @@ export function AuthView() {
           <h3 className="mb-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-900">
             {vm.mode === 'signup' ? 'Create an Account' : 'Welcome Back'}
           </h3>
-          <p className="text-base leading-relaxed text-gray-600">
+          <p className="text-base leading-relaxed text-gray-600 dark:text-gray-300">
             {vm.mode === 'signup'
               ? 'Sign up to get started with Papr!'
               : 'Sign in to continue to Papr!'}

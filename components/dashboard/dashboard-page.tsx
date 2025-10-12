@@ -113,13 +113,15 @@ export function DashboardView() {
               </div>
             )}
 
-            <h1 className="mb-2 text-4xl font-bold text-gray-900">
+            <h1 className="mb-2 text-4xl font-bold text-gray-900 dark:text-gray-100">
               {authViewModel.user && (
-                <p className="text-gray-700">Your Dashboard</p>
+                <p className="text-gray-700 dark:text-gray-200">
+                  Your Dashboard
+                </p>
               )}
             </h1>
 
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Manage your saved papers and research
             </p>
           </div>
@@ -188,7 +190,7 @@ export function DashboardView() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <BookmarkCheck className="h-6 w-6 text-blue-600" />
-                <h2 className="text-2xl font-semibold text-gray-900">
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
                   {dashboardViewModel.selectedFolder?.name || 'All'} Papers
                 </h2>
               </div>
@@ -248,10 +250,10 @@ export function DashboardView() {
               !dashboardViewModel.error && (
                 <div className="py-12 text-center">
                   <BookmarkCheck className="mx-auto mb-4 h-16 w-16 text-gray-300" />
-                  <h3 className="mb-2 text-xl font-semibold text-gray-600">
+                  <h3 className="mb-2 text-xl font-semibold text-gray-600 dark:text-gray-300">
                     No saved papers yet
                   </h3>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500 dark:text-gray-300">
                     Start saving papers from the search results to see them
                     here.
                   </p>

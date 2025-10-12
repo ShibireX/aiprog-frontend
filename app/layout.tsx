@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { FooterView } from '@/components/footer/footer-view'
 import { ViewModelProvider } from '@/lib/viewmodels/viewmodel-provider'
+import { cookies } from 'next/headers'
 
 import './globals.css'
 
@@ -17,12 +19,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const theme = cookies().get('theme')?.value ?? 'light'
+  const isDark = theme === 'dark'
+
   return (
-    <html lang="en">
+    <html lang="en" className={isDark ? 'dark' : ''}>
       <body className={inter.className}>
         <ViewModelProvider>
           <div className="min-h-screen bg-background font-sans antialiased">
-            <main>{children}</main>
+            <main>
+              {children}
+              <FooterView />
+            </main>
           </div>
         </ViewModelProvider>
       </body>
