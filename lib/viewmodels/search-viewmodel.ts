@@ -303,7 +303,7 @@ export class SearchViewModel {
   ): Promise<SearchResult> => {
     const variables = {
       query,
-      limit: filters.limit || 10,
+      limit: filters.limit || 50,
       offset: filters.offset || 0,
     }
 
