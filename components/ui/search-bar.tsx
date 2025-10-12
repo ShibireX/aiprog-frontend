@@ -14,6 +14,17 @@ interface SearchBarProps {
   hideSearchButton?: boolean
 }
 
+const placeholderExamples = [
+  'HCI',
+  'Computer Science',
+  '3D Design',
+  'Economics',
+  'Law',
+  'Machine Learning',
+  'Climate Change',
+  'Psychology',
+]
+
 export function SearchBar({
   value,
   onChange,
@@ -29,17 +40,6 @@ export function SearchBar({
   const [visiblePlaceholder, setVisiblePlaceholder] = useState('')
   const [isTransitioning, setIsTransitioning] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const placeholderExamples = [
-    'HCI',
-    'Computer Science',
-    '3D Design',
-    'Economics',
-    'Law',
-    'Machine Learning',
-    'Climate Change',
-    'Psychology',
-  ]
 
   useEffect(() => {
     if (autoFocus && inputRef.current) {
@@ -73,7 +73,7 @@ export function SearchBar({
     }, 3000) // Rotation interval
 
     return () => clearInterval(rotationInterval)
-  }, [placeholderIndex, value, isFocused, placeholderExamples])
+  }, [placeholderIndex, value, isFocused])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && value.trim()) {
