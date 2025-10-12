@@ -292,7 +292,9 @@ export function SearchResults({
       {results.next && (
         <div className="pt-8 text-center">
           <div className="inline-flex items-center space-x-2 text-gray-500">
-            <span className="text-sm">For more relevant results, try adjusting your search query</span>
+            <span className="text-sm">
+              For more relevant results, try adjusting your search query
+            </span>
           </div>
         </div>
       )}
