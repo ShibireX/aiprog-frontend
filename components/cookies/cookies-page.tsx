@@ -1,48 +1,26 @@
-'use client'
-
-import { useSearchViewModel } from '@/lib/viewmodels/search-viewmodel'
-import { Button } from '@/components/ui/button'
-import { UserAvatar } from '@/components/ui/user-avatar'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ThemeSwitch } from '../ui/theme-switch'
+import Link from 'next/link'
+import { BackToSearch } from '@/components/ui/back-to-search'
 
 export function CookiesView() {
-  const searchViewModel = useSearchViewModel()
-
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key="cookies"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="min-h-screen p-4"
-      >
-        {/* Header Section */}
-        <div className="relative">
-          <div className="flex flex-row place-items-end justify-end p-4 px-4">
-            {searchViewModel.auth.isAuthenticated ? (
-              <div>
-                <UserAvatar />
-                <ThemeSwitch />
-              </div>
-            ) : (
-              <Button description="Sign up" link="/signup" />
-            )}
-          </div>
-          <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mb-12 text-center">
-              <div className="mb-6">
-                <a href="/">
-                  <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent dark:text-gray-200 sm:text-7xl">
-                    [ Papr ]
-                  </h1>
-                </a>
-              </div>
+    <div className="min-h-screen p-4">
+      {/* Back Button - Top Left */}
+      <BackToSearch />
+
+      {/* Header Section */}
+      <div className="relative">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <div className="mb-6">
+              <Link href="/">
+                <h1 className="mb-2 bg-gray-800 from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-6xl font-medium tracking-tight text-transparent dark:text-gray-200 sm:text-7xl">
+                  [ Papr ]
+                </h1>
+              </Link>
             </div>
           </div>
         </div>
+      </div>
         {/* Main Content */}
         <div className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl px-4 py-8 sm:px-4 lg:px-8">
@@ -114,7 +92,6 @@ export function CookiesView() {
             </section>
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>
+    </div>
   )
 }

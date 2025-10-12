@@ -1,4 +1,4 @@
-import { LinkSmall } from '@/components/ui/link-small'
+import Link from 'next/link'
 
 export function FooterView() {
   return (
@@ -10,7 +10,13 @@ export function FooterView() {
         <p className="leading-relaxed text-gray-700 dark:text-gray-200">
           We built this website as part of a university course. If you would
           like to know more about the project you can read about that{' '}
-          <LinkSmall href="/thisproject" content="[Here]" />.
+          <Link
+            href="/thisproject"
+            className="font-semibold leading-relaxed text-gray-700 underline hover:text-blue-700 dark:text-gray-200 dark:hover:text-blue-400"
+          >
+            here
+          </Link>
+          .
         </p>
       </section>
       <section className="flex max-w-48 flex-col items-center justify-center gap-6 text-center">
@@ -18,9 +24,15 @@ export function FooterView() {
           About us
         </h3>
         <p className="leading-relaxed text-gray-700 dark:text-gray-200">
-          The team behind this website consist of five university students.
-          <LinkSmall href="#" content="[Here]" /> you can read more about us and
-          our specific roles in this project.
+          The team behind this website consist of five university students. You
+          can read more about us{' '}
+          <Link
+            href="/about"
+            className="font-semibold leading-relaxed text-gray-700 underline hover:text-blue-700 dark:text-gray-200 dark:hover:text-blue-400"
+          >
+            here
+          </Link>
+          .
         </p>
       </section>
       <section className="flex max-w-48 flex-col items-center justify-center gap-6 text-center">
@@ -30,7 +42,13 @@ export function FooterView() {
         <p className="leading-relaxed text-gray-700 dark:text-gray-200">
           This site uses cookies to enhance your experience. To read more about
           what we store and why, see our{' '}
-          <LinkSmall href="/cookies" content="[Cookie policy]" />.
+          <Link
+            href="/cookies"
+            className="font-semibold leading-relaxed text-gray-700 underline hover:text-blue-700 dark:text-gray-200 dark:hover:text-blue-400"
+          >
+            cookie policy
+          </Link>
+          .
         </p>
       </section>
     </footer>

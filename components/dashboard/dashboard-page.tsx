@@ -55,11 +55,11 @@ export function DashboardView() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="min-h-screen from-slate-50 via-blue-50/30 to-indigo-50/50 p-4"
+        className="min-h-screen p-4"
       >
         {/* Background Pattern */}
         <div
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0 opacity-40 dark:opacity-20"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}
@@ -82,11 +82,11 @@ export function DashboardView() {
                       alt={authViewModel.user.username}
                       width={96}
                       height={96}
-                      className="rounded-full border-4 border-white object-cover shadow-lg"
+                      className="rounded-full border-4 border-white object-cover shadow-lg dark:border-gray-700"
                       priority
                     />
                   ) : (
-                    <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg dark:border-gray-700">
                       <span className="text-3xl font-bold text-white">
                         {authViewModel.user.username?.charAt(0).toUpperCase() ||
                           authViewModel.user.email?.charAt(0).toUpperCase()}
@@ -106,7 +106,7 @@ export function DashboardView() {
 
                 {/* Upload Error Message */}
                 {authViewModel.uploadError && (
-                  <p className="mt-2 text-center text-sm text-red-600">
+                  <p className="mt-2 text-center text-sm text-red-600 dark:text-red-400">
                     {authViewModel.uploadError}
                   </p>
                 )}
@@ -138,7 +138,7 @@ export function DashboardView() {
                   'px-4 py-2',
                   dashboardViewModel.selectedFolderId === null
                     ? 'border-blue-600 bg-blue-500 text-white'
-                    : 'border-white/20 bg-white/80 text-gray-700 hover:bg-white'
+                    : 'border-white/20 bg-white/80 text-gray-700 hover:bg-white dark:border-gray-600/50 dark:bg-gray-700/80 dark:text-gray-200 dark:hover:bg-gray-600/90'
                 )}
               >
                 <Folder className="h-4 w-4" />
@@ -162,7 +162,7 @@ export function DashboardView() {
                     'px-4 py-2',
                     dashboardViewModel.selectedFolderId === folder.id
                       ? 'border-blue-600 bg-blue-500 text-white'
-                      : 'border-white/20 bg-white/80 text-gray-700 hover:bg-white'
+                      : 'border-white/20 bg-white/80 text-gray-700 hover:bg-white dark:border-gray-600/50 dark:bg-gray-700/80 dark:text-gray-200 dark:hover:bg-gray-600/90'
                   )}
                 >
                   <Folder className="h-4 w-4" />
@@ -176,7 +176,7 @@ export function DashboardView() {
               {/* Add Map Button */}
               <button
                 onClick={() => dashboardViewModel.openAddMapModal()}
-                className="p-2 text-blue-600 transition-all duration-200 hover:scale-110 hover:text-blue-700"
+                className="p-2 text-blue-600 transition-all duration-200 hover:scale-110 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                 title="Create new map"
               >
                 <FolderPlus className="h-6 w-6" />
@@ -189,14 +189,14 @@ export function DashboardView() {
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <BookmarkCheck className="h-6 w-6 text-blue-600" />
+                <BookmarkCheck className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
                   {dashboardViewModel.selectedFolder?.name || 'All'} Papers
                 </h2>
               </div>
-              <div className="flex items-center space-x-2 rounded-full bg-white/70 px-4 py-2 shadow-lg backdrop-blur-sm">
+              <div className="flex items-center space-x-2 rounded-full bg-white/70 px-4 py-2 shadow-lg backdrop-blur-sm dark:bg-gray-700/70">
                 <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-gray-700 dark:text-gray-200">
                   {(() => {
                     const count =
                       dashboardViewModel.selectedFolderId === null
@@ -227,17 +227,17 @@ export function DashboardView() {
               dashboardViewModel.savedPapers.length === 0 && (
                 <div className="py-8 text-center">
                   <RefreshCw className="mx-auto mb-4 h-8 w-8 animate-spin text-blue-500" />
-                  <p className="text-gray-600">Loading your saved papers...</p>
+                  <p className="text-gray-600 dark:text-gray-300">Loading your saved papers...</p>
                 </div>
               )}
 
             {/* Error State */}
             {dashboardViewModel.error && (
-              <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
-                <p className="text-red-700">{dashboardViewModel.error}</p>
+              <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/30">
+                <p className="text-red-700 dark:text-red-400">{dashboardViewModel.error}</p>
                 <button
                   onClick={() => dashboardViewModel.clearError()}
-                  className="mt-2 text-sm text-red-600 underline hover:text-red-800"
+                  className="mt-2 text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                 >
                   Dismiss
                 </button>
@@ -249,11 +249,11 @@ export function DashboardView() {
               dashboardViewModel.savedPapers.length === 0 &&
               !dashboardViewModel.error && (
                 <div className="py-12 text-center">
-                  <BookmarkCheck className="mx-auto mb-4 h-16 w-16 text-gray-300" />
+                  <BookmarkCheck className="mx-auto mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
                   <h3 className="mb-2 text-xl font-semibold text-gray-600 dark:text-gray-300">
                     No saved papers yet
                   </h3>
-                  <p className="text-gray-500 dark:text-gray-300">
+                  <p className="text-gray-500 dark:text-gray-400">
                     Start saving papers from the search results to see them
                     here.
                   </p>
@@ -266,7 +266,7 @@ export function DashboardView() {
                 {dashboardViewModel.filteredSavedPapers.map(savedPaper => (
                   <div
                     key={savedPaper.id}
-                    className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/90 hover:shadow-xl"
+                    className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/90 hover:shadow-xl dark:border-gray-700/50 dark:bg-slate-800/80 dark:hover:bg-slate-700/70"
                   >
                     {/* Action Buttons - Top Right */}
                     <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
@@ -275,7 +275,7 @@ export function DashboardView() {
                           e.stopPropagation()
                           citationViewModel.openPopup([savedPaper])
                         }}
-                        className="rounded-full border border-blue-200 bg-blue-50 p-2 text-blue-600 shadow-md transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700"
+                        className="rounded-full border border-blue-200 bg-blue-50 p-2 text-blue-600 shadow-md transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-blue-800 dark:bg-blue-900/50 dark:text-blue-400 dark:hover:border-blue-700 dark:hover:bg-blue-800/70"
                         title="Get citation"
                       >
                         <FileText className="h-5 w-5" />
@@ -291,7 +291,7 @@ export function DashboardView() {
                             dashboardViewModel.unsavePaper(savedPaper.id)
                           }
                         }}
-                        className="rounded-full border border-red-200 bg-red-50 p-2 text-red-600 shadow-md transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700"
+                        className="rounded-full border border-red-200 bg-red-50 p-2 text-red-600 shadow-md transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 dark:border-red-800 dark:bg-red-900/50 dark:text-red-400 dark:hover:border-red-700 dark:hover:bg-red-800/70"
                         title="Remove from collection"
                       >
                         <Trash2 className="h-5 w-5" />
@@ -301,18 +301,18 @@ export function DashboardView() {
                     <div className="w-full p-6 pr-24 text-left">
                       <div className="space-y-4">
                         {/* Title */}
-                        <h3 className="text-xl font-bold leading-tight text-gray-900 transition-colors group-hover:text-blue-900">
+                        <h3 className="text-xl font-bold leading-tight text-gray-900 transition-colors group-hover:text-blue-900 dark:text-gray-100 dark:group-hover:text-blue-400">
                           {savedPaper.paper.title}
                         </h3>
 
                         {/* Authors */}
-                        <p className="text-base font-medium text-gray-600">
+                        <p className="text-base font-medium text-gray-600 dark:text-gray-300">
                           {savedPaper.paper.authors.join(', ')}
                         </p>
 
                         {/* Abstract */}
                         {savedPaper.paper.abstract && (
-                          <p className="line-clamp-3 text-sm leading-relaxed text-gray-700">
+                          <p className="line-clamp-3 text-sm leading-relaxed text-gray-700 dark:text-gray-400">
                             {savedPaper.paper.abstract}
                           </p>
                         )}
@@ -320,17 +320,17 @@ export function DashboardView() {
                         {/* Metadata Tags */}
                         <div className="flex flex-wrap items-center gap-2 pt-2">
                           {savedPaper.paper.year && (
-                            <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">
+                            <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200">
                               {savedPaper.paper.year}
                             </span>
                           )}
                           {savedPaper.paper.venue && (
-                            <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
+                            <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">
                               {savedPaper.paper.venue}
                             </span>
                           )}
                           {savedPaper.paper.citationCount !== undefined && (
-                            <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                            <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900/50 dark:text-green-300">
                               {savedPaper.paper.citationCount} citations
                             </span>
                           )}
@@ -370,22 +370,22 @@ export function DashboardView() {
             onClick={() => dashboardViewModel.closeAddMapModal()}
           >
             <div
-              className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl"
+              className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800"
               onClick={e => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-gray-200 p-6">
+              <div className="flex items-center justify-between border-b border-gray-200 p-6 dark:border-gray-700">
                 <div className="flex items-center gap-3">
-                  <FolderPlus className="h-6 w-6 text-blue-600" />
-                  <h2 className="text-2xl font-semibold text-gray-900">
+                  <FolderPlus className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
                     Create New Map
                   </h2>
                 </div>
                 <button
                   onClick={() => dashboardViewModel.closeAddMapModal()}
-                  className="rounded-full p-2 transition-colors hover:bg-gray-100"
+                  className="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  <X className="h-5 w-5 text-gray-500" />
+                  <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 </button>
               </div>
 
@@ -393,7 +393,7 @@ export function DashboardView() {
               <div className="p-6">
                 <label
                   htmlFor="map-name"
-                  className="mb-2 block text-sm font-medium text-gray-700"
+                  className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Map Name
                 </label>
@@ -412,19 +412,19 @@ export function DashboardView() {
                     }
                   }}
                   placeholder="e.g., Computer Vision, Machine Learning"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
                   autoFocus
                 />
-                <p className="mt-2 text-sm text-gray-500">
+                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                   Choose a descriptive name for your research map
                 </p>
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 p-6">
+              <div className="flex items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900">
                 <button
                   onClick={() => dashboardViewModel.closeAddMapModal()}
-                  className="rounded-lg px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200"
+                  className="rounded-lg px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
                 >
                   Cancel
                 </button>
