@@ -12,7 +12,8 @@ export function AuthView() {
       <div
         className={cn(
           'group rounded-3xl border-0 bg-white/40 p-8 shadow-lg backdrop-blur-sm',
-          'relative z-10 w-full max-w-md'
+          'relative z-10 w-full max-w-md',
+          'dark:bg-gray-800/40 dark:shadow-gray-900/50'
         )}
       >
         <div className="mb-6 space-y-4 text-center">
@@ -25,7 +26,7 @@ export function AuthView() {
               )}
             </div>
           </div>
-          <h3 className="mb-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-900">
+          <h3 className="mb-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-900 dark:text-gray-100 dark:group-hover:text-blue-400">
             {vm.mode === 'signup' ? 'Create an Account' : 'Welcome Back'}
           </h3>
           <p className="text-base leading-relaxed text-gray-600 dark:text-gray-300">

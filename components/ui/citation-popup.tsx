@@ -32,19 +32,19 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
       onClick={citationViewModel.closePopup}
     >
       <div
-        className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 p-6">
+        <div className="flex items-center justify-between border-b border-gray-200 p-6 dark:border-gray-700">
           <div className="flex items-center gap-3">
-            <FileText className="h-6 w-6 text-blue-600" />
-            <h2 className="text-2xl font-semibold text-gray-900">
+            <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
               {citationViewModel.selectedPapers.length === 1
                 ? 'Citation'
                 : 'Bulk Citations'}
             </h2>
-            <span className="text-gray-500">
+            <span className="text-gray-500 dark:text-gray-400">
               ({citationViewModel.selectedPapers.length}{' '}
               {citationViewModel.selectedPapers.length === 1
                 ? 'paper'
@@ -54,16 +54,16 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
           </div>
           <button
             onClick={citationViewModel.closePopup}
-            className="rounded-full p-2 transition-colors hover:bg-gray-100"
+            className="rounded-full p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <X className="h-5 w-5 text-gray-500" />
+            <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
           </button>
         </div>
 
         <div className="max-h-[calc(90vh-120px)] overflow-y-auto p-6">
           {/* Format Selection */}
           <div className="mb-6">
-            <h3 className="mb-4 text-lg font-medium text-gray-900">
+            <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">
               Select Citation Format
             </h3>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -74,17 +74,17 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
                   className={cn(
                     'rounded-lg border-2 p-4 text-left transition-all duration-200',
                     citationViewModel.selectedFormat === format.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-blue-500 bg-blue-50 dark:border-blue-500 dark:bg-blue-900/30'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-700/50'
                   )}
                 >
-                  <div className="mb-1 font-medium text-gray-900">
+                  <div className="mb-1 font-medium text-gray-900 dark:text-gray-100">
                     {format.name}
                   </div>
-                  <div className="mb-2 text-sm text-gray-600">
+                  <div className="mb-2 text-sm text-gray-600 dark:text-gray-300">
                     {format.description}
                   </div>
-                  <div className="text-xs italic text-gray-500">
+                  <div className="text-xs italic text-gray-500 dark:text-gray-400">
                     {format.example}
                   </div>
                 </button>
@@ -97,7 +97,7 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
             <button
               onClick={handleGenerate}
               disabled={citationViewModel.isGenerating}
-              className="mx-auto flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mx-auto flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-500 dark:hover:bg-blue-600"
             >
               {citationViewModel.isGenerating ? (
                 <>
@@ -117,7 +117,7 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
           {citationViewModel.generatedCitations && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium text-gray-900">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                   Generated Citations
                 </h3>
                 <button
@@ -125,8 +125,8 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
                   className={cn(
                     'flex items-center gap-2 rounded-lg px-4 py-2 transition-all duration-200',
                     copySuccess
-                      ? 'border border-green-200 bg-green-100 text-green-700'
-                      : 'border border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'border border-green-200 bg-green-100 text-green-700 dark:border-green-800 dark:bg-green-900/50 dark:text-green-300'
+                      : 'border border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                   )}
                 >
                   {copySuccess ? (
@@ -143,13 +143,13 @@ export function CitationPopup({ citationViewModel }: CitationPopupProps) {
                 </button>
               </div>
 
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-800">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
+                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-800 dark:text-gray-200">
                   {citationViewModel.generatedCitations}
                 </pre>
               </div>
 
-              <div className="text-center text-xs text-gray-500">
+              <div className="text-center text-xs text-gray-500 dark:text-gray-400">
                 Citations generated in{' '}
                 {
                   citationViewModel.availableFormats.find(

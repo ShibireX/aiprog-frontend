@@ -27,9 +27,9 @@ export function SearchPage() {
         <div className="relative">
           <div className="flex flex-row place-items-end justify-end p-4 px-4">
             {searchViewModel.auth.isAuthenticated ? (
-              <div>
-                <UserAvatar />
+              <div className="flex flex-row items-center gap-4">
                 <ThemeSwitch />
+                <UserAvatar />
               </div>
             ) : (
               <Button description="Sign up" link="/signup" />

@@ -86,7 +86,7 @@ export function SearchResults({
                 : `${index * 150}ms`,
             }}
           >
-            <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/90 hover:shadow-xl dark:bg-slate-800/80 dark:hover:bg-slate-700/70">
+            <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/90 hover:shadow-xl dark:border-gray-700/50 dark:bg-slate-800/80 dark:hover:bg-slate-700/70">
               {/* Save Button - Top Right */}
               <button
                 onClick={e => {
@@ -103,8 +103,8 @@ export function SearchResults({
                 className={cn(
                   'absolute right-4 top-4 z-10 rounded-full p-2 shadow-md transition-all duration-200',
                   searchViewModel.savedPapers.has(paper.id)
-                    ? 'border border-green-200 bg-green-100 text-green-700'
-                    : 'border border-gray-200 bg-white text-gray-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300'
+                    ? 'border border-green-200 bg-green-100 text-green-700 dark:border-green-800 dark:bg-green-900/50 dark:text-green-300'
+                    : 'border border-gray-200 bg-white text-gray-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-blue-700 dark:hover:bg-blue-900/30 dark:hover:text-blue-400'
                 )}
                 title={
                   searchViewModel.savedPapers.has(paper.id)
@@ -149,14 +149,14 @@ export function SearchResults({
                       </span>
                     )}
                     {paper.citationCount !== undefined && (
-                      <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-slate-900">
+                      <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-slate-900 dark:text-green-300">
                         {paper.citationCount} citations
                       </span>
                     )}
 
                     {/* Click indicator */}
                     <div className="ml-auto flex items-center space-x-2 opacity-60 transition-opacity group-hover:opacity-100">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
                         {paper.tldr
                           ? isExpanded(paper.id)
                             ? 'Click to collapse'
@@ -165,7 +165,7 @@ export function SearchResults({
                       </span>
                       <svg
                         className={cn(
-                          'h-4 w-4 text-gray-400 transition-transform duration-300',
+                          'h-4 w-4 text-gray-400 transition-transform duration-300 dark:text-gray-500',
                           paper.tldr && isExpanded(paper.id)
                             ? 'rotate-90'
                             : 'group-hover:translate-x-1'
@@ -196,14 +196,14 @@ export function SearchResults({
                       : 'max-h-0 opacity-0'
                   )}
                 >
-                  <div className="border-t border-gray-100 px-6 pb-6 pt-2">
+                  <div className="border-t border-gray-100 px-6 pb-6 pt-2 dark:border-gray-700">
                     <div className="space-y-6">
                       {/* TLDR Section - First */}
-                      <div className="rounded-xl border border-blue-100 bg-blue-50 p-5 dark:bg-slate-950">
+                      <div className="rounded-xl border border-blue-100 bg-blue-50 p-5 dark:border-blue-900/50 dark:bg-blue-950/30">
                         <div className="mb-3 flex items-center space-x-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 dark:bg-blue-600">
                             <svg
-                              className="h-4 w-4 text-white dark:text-gray-900"
+                              className="h-4 w-4 text-white"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -220,16 +220,16 @@ export function SearchResults({
                             TL;DR Summary
                           </h4>
                         </div>
-                        <p className="pl-11 text-base leading-relaxed text-gray-800 dark:text-gray-200">
+                        <p className="pl-11 text-base leading-relaxed text-gray-800 dark:text-gray-300">
                           {paper.tldr.text}
                         </p>
                       </div>
 
                       {/* Abstract Section - Second */}
                       {paper.abstract && (
-                        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:bg-slate-950">
+                        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700/50 dark:bg-gray-900/30">
                           <div className="mb-3 flex items-center space-x-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 dark:bg-slate-800">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 dark:bg-gray-700">
                               <svg
                                 className="h-4 w-4 text-white"
                                 fill="none"
@@ -248,7 +248,7 @@ export function SearchResults({
                               Abstract
                             </h4>
                           </div>
-                          <p className="pl-11 text-base leading-relaxed text-gray-700 dark:text-gray-200">
+                          <p className="pl-11 text-base leading-relaxed text-gray-700 dark:text-gray-300">
                             {paper.abstract}
                           </p>
                         </div>
@@ -259,7 +259,7 @@ export function SearchResults({
                             href={paper.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center space-x-2 font-medium text-blue-600 transition-colors hover:text-blue-800"
+                            className="inline-flex items-center space-x-2 font-medium text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                             onClick={e => e.stopPropagation()}
                           >
                             <span>Read full paper</span>
