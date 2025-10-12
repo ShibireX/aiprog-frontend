@@ -292,12 +292,7 @@ export function SearchResults({
       {results.next && (
         <div className="pt-8 text-center">
           <div className="inline-flex items-center space-x-2 text-gray-500">
-            <div className="h-1 w-1 animate-pulse rounded-full bg-gray-400"></div>
-            <span className="text-sm">More results available</span>
-            <div
-              className="h-1 w-1 animate-pulse rounded-full bg-gray-400"
-              style={{ animationDelay: '0.5s' }}
-            ></div>
+            <span className="text-sm">For more relevant results, try adjusting your search query</span>
           </div>
         </div>
       )}
