@@ -85,18 +85,19 @@ export function SearchBar({
     <div className={cn('relative mx-auto w-full max-w-3xl', className)}>
       <div
         className={cn(
-          'relative flex items-center rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-sm transition-all duration-300',
+          'relative flex items-center rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-sm transition-all duration-300 dark:bg-slate-800/80',
           isFocused
             ? 'bg-white/90 shadow-2xl ring-1 ring-blue-500/30'
             : 'shadow-lg',
-          'hover:bg-white/85 hover:shadow-xl'
+          'hover:bg-white/85 hover:shadow-xl dark:hover:bg-slate-800/60'
         )}
       >
         <div className="flex items-center pl-6">
           <svg
             className={cn(
               'h-6 w-6 transition-all duration-300',
-              isFocused ? 'scale-110 text-blue-600' : 'text-gray-400'
+              isFocused ? 'scale-110 text-blue-600' : 'text-gray-400',
+              isFocused ? 'scale-110 dark:text-blue-300' : 'dark:text-gray-700'
             )}
             fill="none"
             stroke="currentColor"
@@ -133,7 +134,7 @@ export function SearchBar({
           onBlur={() => setIsFocused(false)}
           placeholder={value || isFocused ? placeholder : ''}
           className={cn(
-            'w-full bg-transparent px-6 py-5 text-lg text-gray-900',
+            'w-full bg-transparent px-6 py-5 text-lg text-gray-900 dark:text-gray-200',
             'placeholder:text-gray-400 focus:outline-none',
             'rounded-2xl border-0'
           )}
@@ -143,7 +144,7 @@ export function SearchBar({
           {value && !isLoading && (
             <button
               onClick={() => onChange('')}
-              className="text-gray-400 transition-all duration-200 hover:scale-110 hover:text-gray-600"
+              className="text-gray-400 transition-all duration-200 hover:scale-110 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-300"
               type="button"
             >
               <svg
