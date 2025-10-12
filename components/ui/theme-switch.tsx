@@ -34,7 +34,7 @@ export function ThemeSwitch() {
     <button
       onClick={toggle}
       className={`group relative inline-flex h-10 w-20 items-center rounded-full bg-gray-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-700 ${
-        mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+        mounted ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
       }`}
       aria-label="Toggle theme"
     >

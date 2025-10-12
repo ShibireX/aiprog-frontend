@@ -227,14 +227,18 @@ export function DashboardView() {
               dashboardViewModel.savedPapers.length === 0 && (
                 <div className="py-8 text-center">
                   <RefreshCw className="mx-auto mb-4 h-8 w-8 animate-spin text-blue-500" />
-                  <p className="text-gray-600 dark:text-gray-300">Loading your saved papers...</p>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Loading your saved papers...
+                  </p>
                 </div>
               )}
 
             {/* Error State */}
             {dashboardViewModel.error && (
               <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/30">
-                <p className="text-red-700 dark:text-red-400">{dashboardViewModel.error}</p>
+                <p className="text-red-700 dark:text-red-400">
+                  {dashboardViewModel.error}
+                </p>
                 <button
                   onClick={() => dashboardViewModel.clearError()}
                   className="mt-2 text-sm text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"

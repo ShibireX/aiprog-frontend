@@ -51,7 +51,9 @@ export function AuthForm({
           onClick={() => setMode('signup')}
           className={cn(
             'relative z-10 flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-300',
-            isSignUp ? 'text-white' : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100'
+            isSignUp
+              ? 'text-white'
+              : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100'
           )}
         >
           Sign Up
@@ -61,7 +63,9 @@ export function AuthForm({
           onClick={() => setMode('login')}
           className={cn(
             'relative z-10 flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-300',
-            !isSignUp ? 'text-white' : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100'
+            !isSignUp
+              ? 'text-white'
+              : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100'
           )}
         >
           Login
@@ -188,7 +192,9 @@ export function AuthForm({
 
         {errorMessage && (
           <div className="animate-in slide-in-from-top-2 rounded-lg border border-red-200 bg-red-50 p-3 duration-300 dark:border-red-800 dark:bg-red-900/30">
-            <p className="text-center text-sm text-red-700 dark:text-red-400">{errorMessage}</p>
+            <p className="text-center text-sm text-red-700 dark:text-red-400">
+              {errorMessage}
+            </p>
           </div>
         )}
 

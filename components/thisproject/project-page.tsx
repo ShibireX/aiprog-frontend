@@ -21,35 +21,35 @@ export function ProjectView() {
           </div>
         </div>
       </div>
-        {/* Main Content */}
-        <div className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-4 lg:px-8">
-            <section className="pb-24">
-              <div className="pb-6 text-center lg:pb-8">
-                <h2 className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700 dark:text-gray-200">
-                  About this project
-                </h2>
-              </div>
-              <div className="pb-4 text-center lg:pb-6">
-                <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
-                  <i>Papr</i> was built as a course project at KTH in Sweden to
-                  demonstrate skills in advnced interaction programming.
-                </p>
-              </div>
-              <div className="pb-4 text-center lg:pb-6">
-                <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
-                  The tech stack we are using consist of a React with Next
-                  frontend utilizing Tailwind for styling, and a Fastify with
-                  GraphQL, Mercurius and SQLite backend. All written in
-                  TypeScript with Node. Additional tools we have used include
-                  GitHub and Git for version control, Prettier for formatting,
-                  Vitest for code testing, Postman for testing API endpoints and
-                  Docker for containerization and deployment.
-                </p>
-              </div>
-            </section>
-          </div>
+      {/* Main Content */}
+      <div className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-4 lg:px-8">
+          <section className="pb-24">
+            <div className="pb-6 text-center lg:pb-8">
+              <h2 className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700 dark:text-gray-200">
+                About this project
+              </h2>
+            </div>
+            <div className="pb-4 text-center lg:pb-6">
+              <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
+                <i>Papr</i> was built as a course project at KTH in Sweden to
+                demonstrate skills in advnced interaction programming.
+              </p>
+            </div>
+            <div className="pb-4 text-center lg:pb-6">
+              <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
+                The tech stack we are using consist of a React with Next
+                frontend utilizing Tailwind for styling, and a Fastify with
+                GraphQL, Mercurius and SQLite backend. All written in TypeScript
+                with Node. Additional tools we have used include GitHub and Git
+                for version control, Prettier for formatting, Vitest for code
+                testing, Postman for testing API endpoints and Docker for
+                containerization and deployment.
+              </p>
+            </div>
+          </section>
         </div>
+      </div>
     </div>
   )
 }
