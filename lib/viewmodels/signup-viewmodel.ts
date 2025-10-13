@@ -10,20 +10,25 @@ import type {
 } from '@/types/signup'
 import { graphqlClient } from '@/lib/graphql/client'
 import { REGISTER_USER, LOGIN_USER } from '../graphql/queries'
+import type { AuthViewModel } from './auth-viewmodel'
+import { useAuthViewModel } from './viewmodel-provider'
 
 export class AuthFormViewModel {
   private state: AuthState
   private setState: (state: AuthState) => void
   private router?: ReturnType<typeof useRouter>
+  private authViewModel?: AuthViewModel
 
   constructor(
     initialState: AuthState,
     setState: (state: AuthState) => void,
-    router?: ReturnType<typeof useRouter>
+    router?: ReturnType<typeof useRouter>,
+    authViewModel?: AuthViewModel
   ) {
     this.state = initialState
     this.setState = setState
     this.router = router
+    this.authViewModel = authViewModel
   }
 
   // Getters
@@ -179,13 +184,18 @@ export class AuthFormViewModel {
     }
   }
 
-  private handleAuthSuccess = (token: string, _user: any) => {
+  private handleAuthSuccess = async (token: string, _user: any) => {
     // Set token for GraphQL client
     graphqlClient.setAuthToken?.(token)
 
     // Persist token for future sessions
     if (typeof window !== 'undefined') {
       localStorage.setItem('auth_token', token)
+    }
+
+    // Update the shared AuthViewModel state with the new auth status
+    if (this.authViewModel) {
+      await this.authViewModel.checkAuthStatus()
     }
 
     this.updateState({ isSubmitting: false })
@@ -239,6 +249,10 @@ export class AuthFormViewModel {
 // Hook for React
 export function useAuthFormViewModel(initialMode: AuthMode = 'signup') {
   const router = useRouter()
+  
+  // Get the shared AuthViewModel to update auth state after successful login/signup
+  const authViewModel = useAuthViewModel()
+  
   const [state, setState] = useState<AuthState>({
     mode: initialMode,
     username: '',
@@ -250,8 +264,8 @@ export function useAuthFormViewModel(initialMode: AuthMode = 'signup') {
     fieldErrors: {},
   })
 
-  const viewModel = useRef(new AuthFormViewModel(state, setState, router))
-  viewModel.current = new AuthFormViewModel(state, setState, router)
+  const viewModel = useRef(new AuthFormViewModel(state, setState, router, authViewModel))
+  viewModel.current = new AuthFormViewModel(state, setState, router, authViewModel)
 
   return viewModel.current
 }
