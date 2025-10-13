@@ -72,7 +72,7 @@ export function DashboardView() {
           }}
         ></div>
         <IconButton link="/" className="relative z-10" />
-        
+
         {/* Logout Button - Top Right */}
         <button
           onClick={handleLogout}

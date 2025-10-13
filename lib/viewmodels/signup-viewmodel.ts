@@ -249,10 +249,10 @@ export class AuthFormViewModel {
 // Hook for React
 export function useAuthFormViewModel(initialMode: AuthMode = 'signup') {
   const router = useRouter()
-  
+
   // Get the shared AuthViewModel to update auth state after successful login/signup
   const authViewModel = useAuthViewModel()
-  
+
   const [state, setState] = useState<AuthState>({
     mode: initialMode,
     username: '',
@@ -264,8 +264,15 @@ export function useAuthFormViewModel(initialMode: AuthMode = 'signup') {
     fieldErrors: {},
   })
 
-  const viewModel = useRef(new AuthFormViewModel(state, setState, router, authViewModel))
-  viewModel.current = new AuthFormViewModel(state, setState, router, authViewModel)
+  const viewModel = useRef(
+    new AuthFormViewModel(state, setState, router, authViewModel)
+  )
+  viewModel.current = new AuthFormViewModel(
+    state,
+    setState,
+    router,
+    authViewModel
+  )
 
   return viewModel.current
 }
