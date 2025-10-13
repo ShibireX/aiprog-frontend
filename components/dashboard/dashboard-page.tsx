@@ -13,6 +13,7 @@ import {
   Trash2,
   Camera,
   Upload,
+  LogOut,
 } from 'lucide-react'
 import Image from 'next/image'
 import { CitationPopup } from '@/components/ui/citation-popup'
@@ -47,6 +48,12 @@ export function DashboardView() {
     input.click()
   }
 
+  const handleLogout = () => {
+    authViewModel.logout()
+    // Redirect to home page after logout
+    window.location.href = '/'
+  }
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -65,6 +72,17 @@ export function DashboardView() {
           }}
         ></div>
         <IconButton link="/" className="relative z-10" />
+        
+        {/* Logout Button - Top Right */}
+        <button
+          onClick={handleLogout}
+          className="absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-white/80 px-4 py-2 text-sm font-medium text-gray-700 shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:border-red-200 hover:bg-red-50 hover:text-red-600 hover:shadow-lg dark:border-gray-600/50 dark:bg-gray-800/80 dark:text-gray-200 dark:hover:border-red-800 dark:hover:bg-red-900/50 dark:hover:text-red-400"
+          title="Logout"
+        >
+          <LogOut className="h-4 w-4" />
+          <span>Logout</span>
+        </button>
+
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           {/* Header */}
           <div className="mb-8 mt-12 flex flex-col items-center">
