@@ -28,9 +28,9 @@ vi.mock('./graphql/queries', () => ({
 
 const testUser = {
   id: '1',
-  email: 'test@example.com',
-  name: 'Rasmus',
-  thumbnailUrl: 'test',
+  email: 'someUser@example.com',
+  name: 'someUser',
+  thumbnailUrl: 'someUrl',
   createdAt: '2025-10-01',
   updatedAt: '2025-10-01',
 } as any
