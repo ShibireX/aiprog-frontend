@@ -9,6 +9,7 @@ export interface AuthState {
   token: string | null
   isUploadingThumbnail: boolean
   uploadError: string | null
+  isDraggingOverAvatar: boolean
 }
 
 export class AuthViewModel {
@@ -35,6 +36,9 @@ export class AuthViewModel {
   }
   get uploadError() {
     return this.state.uploadError
+  }
+  get isDraggingOverAvatar() {
+    return this.state.isDraggingOverAvatar
   }
 
   // Actions
@@ -148,6 +152,45 @@ export class AuthViewModel {
 
   clearUploadError = () => {
     this.updateState({ uploadError: null })
+  }
+
+  handleAvatarDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!this.state.isUploadingThumbnail) {
+      this.updateState({ isDraggingOverAvatar: true })
+    }
+  }
+
+  handleAvatarDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    this.updateState({ isDraggingOverAvatar: false })
+  }
+
+  handleAvatarDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    this.updateState({ isDraggingOverAvatar: false })
+
+    // Prevent multiple uploads at once
+    if (this.state.isUploadingThumbnail) {
+      return
+    }
+
+    const files = e.dataTransfer?.files
+    if (files && files.length > 0) {
+      const file = files[0]
+      // Check if it's an image file
+      const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+      if (acceptedTypes.includes(file.type)) {
+        await this.uploadThumbnail(file)
+      } else {
+        this.updateState({
+          uploadError: 'Invalid file type. Please drop an image file (JPEG, PNG, GIF, WebP)',
+        })
+      }
+    }
   }
 
   private updateState = (partial: Partial<AuthState>) => {

@@ -35,6 +35,7 @@ export function ViewModelProvider({ children }: { children: ReactNode }) {
     token: null,
     isUploadingThumbnail: false,
     uploadError: null,
+    isDraggingOverAvatar: false,
   })
 
   // Wrap setState to increment render key on every state change
