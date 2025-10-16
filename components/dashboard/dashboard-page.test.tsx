@@ -12,7 +12,7 @@ vi.mock('@/lib/viewmodels/citation-viewmodel', () => ({
   useCitationViewModel: vi.fn(),
 }))
 
-vi.mock('next/image', () => ({ default: (p: any) => <img {...p} /> }))
+vi.mock('next/image', () => ({ default: (p: any) => <img {...p} alt={p.alt || ''} /> }))
 vi.mock('@/components/ui/citation-popup', () => ({
   CitationPopup: () => <div />,
 }))

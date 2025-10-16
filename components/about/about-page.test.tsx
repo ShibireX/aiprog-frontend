@@ -20,7 +20,7 @@ describe('<AboutView />', () => {
     expect(link).toHaveAttribute('href', '/')
   })
 
-  it('includes the abck to search button', () => {
+  it('includes the back to search button', () => {
     render(<AboutView />)
     expect(screen.getByTestId('back-to-search')).toBeInTheDocument()
   })

@@ -20,7 +20,7 @@ describe('<ProjectView />', () => {
     expect(link).toHaveAttribute('href', '/')
   })
 
-  it('includes the abck to search button', () => {
+  it('includes the back to search button', () => {
     render(<ProjectView />)
     expect(screen.getByTestId('back-to-search')).toBeInTheDocument()
   })
