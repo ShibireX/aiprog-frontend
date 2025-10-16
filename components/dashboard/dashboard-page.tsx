@@ -204,7 +204,7 @@ export function DashboardView() {
               <button
                 onClick={() => dashboardViewModel.openAddMapModal()}
                 className="p-2 text-blue-600 transition-all duration-200 hover:scale-110 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                title="Create new map"
+                title="Create new folder"
               >
                 <FolderPlus className="h-6 w-6" />
               </button>
@@ -409,7 +409,7 @@ export function DashboardView() {
                 <div className="flex items-center gap-3">
                   <FolderPlus className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                    Create New Map
+                    Create New Folder
                   </h2>
                 </div>
                 <button
@@ -469,7 +469,7 @@ export function DashboardView() {
                       : 'cursor-not-allowed bg-gray-300 text-gray-500'
                   )}
                 >
-                  Create Map
+                  Create Folder
                 </button>
               </div>
             </div>
