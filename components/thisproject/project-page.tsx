@@ -39,12 +39,12 @@ export function ProjectView() {
             <div className="pb-4 text-center lg:pb-6">
               <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
                 The tech stack we are using consist of a React with Next
-                frontend utilizing Tailwind for styling, and a Fastify with
-                GraphQL, Mercurius and SQLite backend. All written in TypeScript
-                with Node. Additional tools we have used include GitHub and Git
-                for version control, Prettier for formatting, Vitest for code
-                testing, Postman for testing API endpoints and Docker for
-                containerization and deployment.
+                frontend utilizing Tailwind for styling, and a Fastify + GraphQL
+                API endpoints, as well as a PostgreSQL database. All written in
+                TypeScript with Node. Additional tools we have used include
+                GitHub and Git for version control, Prettier for formatting,
+                Vitest for code testing, Postman for testing API endpoints and
+                Docker for containerization and deployment.
               </p>
             </div>
           </section>

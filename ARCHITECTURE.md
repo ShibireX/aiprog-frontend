@@ -153,13 +153,10 @@ The View layer consists of React components responsible for rendering the UI and
 - **Search Components** (`components/search/`)
   - `search-page.tsx` - Main search interface
   - `search-results.tsx` - Display search results
-  
 - **Dashboard Components** (`components/dashboard/`)
   - `dashboard-page.tsx` - User's saved papers dashboard
-  
 - **Auth Components** (`components/signup/`)
   - `signup-page.tsx` - Registration and login forms
-  
 - **UI Components** (`components/ui/`)
   - `search-bar.tsx` - Search input component
   - `button.tsx` - Reusable button component
@@ -170,6 +167,7 @@ The View layer consists of React components responsible for rendering the UI and
   - `theme-switch.tsx` - Dark/light mode toggle
 
 #### View Characteristics:
+
 - **Declarative**: Views declare what they want to render based on ViewModel state
 - **Reactive**: Automatically re-render when ViewModel state changes
 - **No Business Logic**: Views only handle presentation and user interactions
@@ -182,21 +180,23 @@ ViewModels are the bridge between Views and Models. They contain presentation lo
 #### Core ViewModels:
 
 ##### **AuthViewModel** (`auth-viewmodel.ts`)
+
 ```typescript
 class AuthViewModel {
   // State
   isAuthenticated: boolean
   user: User | null
   token: string | null
-  
+
   // Actions
-  checkAuthStatus()    // Validate token and load user
-  logout()             // Clear auth state
-  uploadThumbnail()    // Upload user profile picture
+  checkAuthStatus() // Validate token and load user
+  logout() // Clear auth state
+  uploadThumbnail() // Upload user profile picture
 }
 ```
 
 ##### **SearchViewModel** (`search-viewmodel.ts`)
+
 ```typescript
 class SearchViewModel {
   // State
@@ -204,34 +204,36 @@ class SearchViewModel {
   results: SearchResult | null
   savedPapers: Set<string>
   folders: Folder[]
-  
+
   // Actions
-  performSearch()         // Execute search query
-  savePaper()            // Save paper to collection
-  unsavePaper()          // Remove paper from collection
-  loadFolders()          // Load user folders
-  savePaperToFolder()    // Save paper to specific folder
+  performSearch() // Execute search query
+  savePaper() // Save paper to collection
+  unsavePaper() // Remove paper from collection
+  loadFolders() // Load user folders
+  savePaperToFolder() // Save paper to specific folder
 }
 ```
 
 ##### **DashboardViewModel** (`dashboard-viewmodel.ts`)
+
 ```typescript
 class DashboardViewModel {
   // State
   folders: Folder[]
   savedPapers: SavedPaper[]
   filters: DashboardFilters
-  
+
   // Actions
-  loadFolders()           // Load all folders
-  loadSavedPapers()       // Load saved papers
-  createFolder()          // Create new folder
-  movePaperToFolder()     // Move paper between folders
-  unsavePaper()           // Remove paper
+  loadFolders() // Load all folders
+  loadSavedPapers() // Load saved papers
+  createFolder() // Create new folder
+  movePaperToFolder() // Move paper between folders
+  unsavePaper() // Remove paper
 }
 ```
 
 ##### **AuthFormViewModel** (`signup-viewmodel.ts`)
+
 ```typescript
 class AuthFormViewModel {
   // State
@@ -239,32 +241,34 @@ class AuthFormViewModel {
   email: string
   password: string
   fieldErrors: Record<string, string>
-  
+
   // Actions
-  onSubmit()           // Handle form submission
-  validateForm()       // Validate form fields
-  setMode()           // Switch between signup/login
+  onSubmit() // Handle form submission
+  validateForm() // Validate form fields
+  setMode() // Switch between signup/login
 }
 ```
 
 ##### **CitationViewModel** (`citation-viewmodel.ts`)
+
 ```typescript
 class CitationViewModel {
   // State
   selectedFormat: CitationFormat
   selectedPapers: SavedPaper[]
   generatedCitations: string
-  
+
   // Actions
-  generateCitations()    // Generate formatted citations
-  copyToClipboard()     // Copy citations to clipboard
-  setFormat()          // Change citation format
+  generateCitations() // Generate formatted citations
+  copyToClipboard() // Copy citations to clipboard
+  setFormat() // Change citation format
 }
 ```
 
 #### ViewModel Provider (`viewmodel-provider.tsx`)
 
 The `ViewModelProvider` is a React Context provider that:
+
 - Creates singleton instances of all ViewModels
 - Manages their lifecycle
 - Provides them to the component tree
@@ -277,6 +281,7 @@ The `ViewModelProvider` is a React Context provider that:
 ```
 
 #### ViewModel Characteristics:
+
 - **Class-Based**: All ViewModels are ES6 classes with methods and getters
 - **State Management**: Each ViewModel manages its own state using React's `useState`
 - **Business Logic**: Contains validation, transformation, and orchestration logic
@@ -300,6 +305,7 @@ class GraphQLClient {
 #### API Queries (`lib/graphql/queries.ts`)
 
 Defines all GraphQL queries and mutations:
+
 - User authentication (register, login, getCurrentUser)
 - Paper operations (search, save, unsave)
 - Folder management (create, update, delete, move papers)
@@ -316,15 +322,51 @@ Defines all GraphQL queries and mutations:
 
 ```typescript
 // Core domain models
-interface User { id, email, username, thumbnailUrl }
-interface Paper { id, title, authors, abstract, year, venue }
-interface Folder { id, name, paperCount, papers }
-interface SavedPaper { id, paperId, folderId, paper, notes }
+interface User {
+  id
+  email
+  username
+  thumbnailUrl
+}
+interface Paper {
+  id
+  title
+  authors
+  abstract
+  year
+  venue
+}
+interface Folder {
+  id
+  name
+  paperCount
+  papers
+}
+interface SavedPaper {
+  id
+  paperId
+  folderId
+  paper
+  notes
+}
 
 // State models
-interface AuthState { isAuthenticated, user, token }
-interface SearchState { query, results, filters, savedPapers }
-interface DashboardState { folders, savedPapers, filters }
+interface AuthState {
+  isAuthenticated
+  user
+  token
+}
+interface SearchState {
+  query
+  results
+  filters
+  savedPapers
+}
+interface DashboardState {
+  folders
+  savedPapers
+  filters
+}
 ```
 
 ## Data Flow
@@ -390,27 +432,32 @@ interface DashboardState { folders, savedPapers, filters }
 ## Key MVVM Principles Applied
 
 ### 1. **Separation of Concerns**
+
 - **View**: Only handles presentation
 - **ViewModel**: Contains all presentation logic
 - **Model**: Manages data and API communication
 
 ### 2. **Unidirectional Data Flow**
+
 - User actions → ViewModel methods
 - ViewModel methods → Model API calls
 - Model responses → ViewModel state updates
 - State changes → View re-renders
 
 ### 3. **Testability**
+
 - ViewModels can be unit tested without React
 - Models can be mocked for ViewModel tests
 - Views can be tested with mocked ViewModels
 
 ### 4. **Reusability**
+
 - ViewModels can be shared between different views
 - UI components are decoupled from business logic
 - Same ViewModel can power web and potentially mobile apps
 
 ### 5. **State Management**
+
 - Centralized state through `ViewModelProvider`
 - ViewModels can reference each other (e.g., SearchViewModel references AuthViewModel)
 - State synchronization between ViewModels (e.g., folder state synced between Search and Dashboard)
@@ -509,4 +556,3 @@ aiprog-frontend/
 ---
 
 **Last Updated**: October 15, 2025
-

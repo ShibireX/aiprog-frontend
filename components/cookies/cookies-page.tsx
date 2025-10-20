@@ -47,27 +47,6 @@ export function CookiesView() {
               </p>
             </div>
           </section>
-          <section className="pb-24">
-            <div className="pb-6 text-center lg:pb-8">
-              <h2 className="mx-auto max-w-3xl text-2xl font-light leading-relaxed text-gray-700 dark:text-gray-200">
-                Necessary cookies
-              </h2>
-            </div>
-            <div className="pb-4 text-center lg:pb-6">
-              <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
-                These cookies are essential for the website to function
-                properly. They enable basic features like navigation, security,
-                and session management and cannot be disabled without affecting
-                how the site works.
-              </p>
-            </div>
-            <div className="pb-4 text-center lg:pb-6">
-              <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
-                [Will explain what necessary cookies we use once we have decided
-                what we actually want to store...]
-              </p>
-            </div>
-          </section>
 
           <section className="pb-24">
             <div className="pb-6 text-center lg:pb-8">
@@ -85,8 +64,9 @@ export function CookiesView() {
             </div>
             <div className="pb-4 text-center lg:pb-6">
               <p className="mx-auto max-w-4xl text-lg font-light leading-relaxed text-gray-600 dark:text-gray-300">
-                [Will explain what functional cookies we use once we have
-                decided what we actually want to store...]
+                On Papr, we use functional cookies for theme switching, so that
+                you can toggle between light and dark mode depending on your
+                preference.
               </p>
             </div>
           </section>

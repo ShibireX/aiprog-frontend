@@ -182,12 +182,19 @@ export class AuthViewModel {
     if (files && files.length > 0) {
       const file = files[0]
       // Check if it's an image file
-      const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+      const acceptedTypes = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+      ]
       if (acceptedTypes.includes(file.type)) {
         await this.uploadThumbnail(file)
       } else {
         this.updateState({
-          uploadError: 'Invalid file type. Please drop an image file (JPEG, PNG, GIF, WebP)',
+          uploadError:
+            'Invalid file type. Please drop an image file (JPEG, PNG, GIF, WebP)',
         })
       }
     }

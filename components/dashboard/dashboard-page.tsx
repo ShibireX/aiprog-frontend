@@ -91,8 +91,9 @@ export function DashboardView() {
               <div className="mb-6">
                 <div
                   className={cn(
-                    "group relative h-24 w-24 cursor-pointer transition-all duration-200",
-                    authViewModel.isDraggingOverAvatar && "scale-110 ring-4 ring-blue-500 ring-offset-4 dark:ring-offset-gray-900"
+                    'group relative h-24 w-24 cursor-pointer transition-all duration-200',
+                    authViewModel.isDraggingOverAvatar &&
+                      'scale-110 ring-4 ring-blue-500 ring-offset-4 dark:ring-offset-gray-900'
                   )}
                   onClick={handleAvatarClick}
                   onDragOver={authViewModel.handleAvatarDragOver}
@@ -119,10 +120,14 @@ export function DashboardView() {
                   )}
 
                   {/* Camera Overlay */}
-                  <div className={cn(
-                    "absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity duration-200",
-                    authViewModel.isDraggingOverAvatar ? "opacity-100" : "group-hover:opacity-100"
-                  )}>
+                  <div
+                    className={cn(
+                      'absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity duration-200',
+                      authViewModel.isDraggingOverAvatar
+                        ? 'opacity-100'
+                        : 'group-hover:opacity-100'
+                    )}
+                  >
                     {authViewModel.isUploadingThumbnail ? (
                       <Upload className="h-8 w-8 animate-bounce text-white" />
                     ) : (
