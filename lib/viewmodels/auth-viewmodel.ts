@@ -7,6 +7,7 @@ export interface AuthState {
   isAuthenticated: boolean
   user: User | null
   token: string | null
+  isCheckingAuth: boolean
   isUploadingThumbnail: boolean
   uploadError: string | null
   isDraggingOverAvatar: boolean
@@ -31,6 +32,9 @@ export class AuthViewModel {
   get token() {
     return this.state.token
   }
+  get isCheckingAuth() {
+    return this.state.isCheckingAuth
+  }
   get isUploadingThumbnail() {
     return this.state.isUploadingThumbnail
   }
@@ -43,6 +47,9 @@ export class AuthViewModel {
 
   // Actions
   checkAuthStatus = async () => {
+    // Set loading state
+    this.updateState({ isCheckingAuth: true })
+    
     const authState = getAuthState()
 
     if (authState.token) {
@@ -55,6 +62,7 @@ export class AuthViewModel {
           isAuthenticated: true,
           user,
           token: authState.token,
+          isCheckingAuth: false,
         })
       } else {
         // Token is invalid, clear state
@@ -62,11 +70,15 @@ export class AuthViewModel {
           isAuthenticated: false,
           user: null,
           token: null,
+          isCheckingAuth: false,
         })
       }
     } else {
       // No token, user is not authenticated
-      this.updateState(authState)
+      this.updateState({
+        ...authState,
+        isCheckingAuth: false,
+      })
     }
   }
 

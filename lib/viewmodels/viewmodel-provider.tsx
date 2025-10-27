@@ -33,6 +33,7 @@ export function ViewModelProvider({ children }: { children: ReactNode }) {
     isAuthenticated: false,
     user: null,
     token: null,
+    isCheckingAuth: true, // Start in checking state to prevent flash of unauthenticated content
     isUploadingThumbnail: false,
     uploadError: null,
     isDraggingOverAvatar: false,

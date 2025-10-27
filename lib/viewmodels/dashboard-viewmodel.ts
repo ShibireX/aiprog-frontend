@@ -147,7 +147,7 @@ export class DashboardViewModel {
   loadSavedPapers = async (refresh: boolean = false) => {
     // Check if user is authenticated
     if (!this.auth.isAuthenticated) {
-      this.updateState({ error: 'Please log in to view saved papers' })
+      // Don't set an error, just return - the UI will show the banner
       return
     }
 

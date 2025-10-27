@@ -73,17 +73,53 @@ export function DashboardView() {
         ></div>
         <IconButton link="/" className="relative z-10" />
 
-        {/* Logout Button - Top Right */}
-        <button
-          onClick={handleLogout}
-          className="absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-white/80 px-4 py-2 text-sm font-medium text-gray-700 shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:border-red-200 hover:bg-red-50 hover:text-red-600 hover:shadow-lg dark:border-gray-600/50 dark:bg-gray-800/80 dark:text-gray-200 dark:hover:border-red-800 dark:hover:bg-red-900/50 dark:hover:text-red-400"
-          title="Logout"
-        >
-          <LogOut className="h-4 w-4" />
-          <span>Logout</span>
-        </button>
+        {authViewModel.isCheckingAuth && (
+          <div className="relative z-10 mx-auto mt-20 w-full max-w-2xl">
+            <div className="flex flex-col items-center text-center">
+              <RefreshCw className="mb-4 h-16 w-16 animate-spin text-blue-500" />
+              <p className="text-lg text-gray-600 dark:text-gray-300">
+                Loading...
+              </p>
+            </div>
+          </div>
+        )}
 
-        <div className="relative z-10 mx-auto w-full max-w-6xl">
+        {!authViewModel.isCheckingAuth && !authViewModel.isAuthenticated && (
+          <div className="relative z-10 mx-auto mt-20 w-full max-w-2xl">
+            <div className="rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50 to-blue-100 p-8 shadow-xl dark:border-blue-800 dark:from-blue-900/30 dark:to-blue-800/30">
+              <div className="flex flex-col items-center text-center">
+                <LogOut className="mb-4 h-16 w-16 text-blue-600 dark:text-blue-400" />
+                <h2 className="mb-3 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  You are signed out
+                </h2>
+                <p className="mb-6 text-lg text-gray-700 dark:text-gray-300">
+                  Please sign in to access your dashboard
+                </p>
+                <a
+                  href="/signup"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-3 text-lg font-medium text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-600 hover:to-blue-700 hover:shadow-lg"
+                >
+                  Sign In / Sign Up
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!authViewModel.isCheckingAuth && authViewModel.isAuthenticated && (
+          <button
+            onClick={handleLogout}
+            className="absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-white/80 px-4 py-2 text-sm font-medium text-gray-700 shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:border-red-200 hover:bg-red-50 hover:text-red-600 hover:shadow-lg dark:border-gray-600/50 dark:bg-gray-800/80 dark:text-gray-200 dark:hover:border-red-800 dark:hover:bg-red-900/50 dark:hover:text-red-400"
+            title="Logout"
+          >
+            <LogOut className="h-4 w-4" />
+            <span>Logout</span>
+          </button>
+        )}
+
+        {!authViewModel.isCheckingAuth && authViewModel.isAuthenticated && (
+          <>
+          <div className="relative z-10 mx-auto w-full max-w-6xl">
           {/* Header */}
           <div className="mb-8 mt-12 flex flex-col items-center">
             {/* User Avatar */}
@@ -479,6 +515,8 @@ export function DashboardView() {
               </div>
             </div>
           </div>
+        )}
+          </>
         )}
       </motion.div>
     </AnimatePresence>
