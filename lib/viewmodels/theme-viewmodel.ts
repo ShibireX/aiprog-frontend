@@ -33,20 +33,20 @@ export class ThemeViewModel {
   initialize = () => {
     if (typeof document !== 'undefined') {
       const isDark = document.documentElement.classList.contains('dark')
-      this.updateState({ 
+      this.updateState({
         theme: isDark ? 'dark' : 'light',
-        mounted: true 
+        mounted: true,
       })
     }
   }
 
   toggleTheme = async () => {
     const nextTheme: Theme = this.state.theme === 'dark' ? 'light' : 'dark'
-    
+
     if (typeof document !== 'undefined') {
       document.documentElement.classList.toggle('dark', nextTheme === 'dark')
     }
-    
+
     this.updateState({ theme: nextTheme })
 
     await this.persistTheme(nextTheme)
@@ -86,4 +86,3 @@ export function useThemeViewModel() {
 
   return viewModel
 }
-

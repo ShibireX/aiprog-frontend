@@ -49,7 +49,7 @@ export class AuthViewModel {
   checkAuthStatus = async () => {
     // Set loading state
     this.updateState({ isCheckingAuth: true })
-    
+
     const authState = getAuthState()
 
     if (authState.token) {
