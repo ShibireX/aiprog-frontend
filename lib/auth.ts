@@ -56,6 +56,14 @@ export async function validateToken(token: string): Promise<User | null> {
   }
 }
 
+export function setAuthToken(token: string): void {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('auth_token', token)
+  }
+  // Set token in GraphQL client
+  graphqlClient.setAuthToken?.(token)
+}
+
 export function logout() {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('auth_token')

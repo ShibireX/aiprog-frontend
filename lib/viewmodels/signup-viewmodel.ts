@@ -10,6 +10,7 @@ import type {
 } from '@/types/signup'
 import { graphqlClient } from '@/lib/graphql/client'
 import { REGISTER_USER, LOGIN_USER } from '../graphql/queries'
+import { setAuthToken } from '@/lib/auth'
 import type { AuthViewModel } from './auth-viewmodel'
 import { useAuthViewModel } from './viewmodel-provider'
 
@@ -185,13 +186,8 @@ export class AuthFormViewModel {
   }
 
   private handleAuthSuccess = async (token: string, _user: any) => {
-    // Set token for GraphQL client
-    graphqlClient.setAuthToken?.(token)
-
-    // Persist token for future sessions
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', token)
-    }
+    // Persist token using auth service (handles both localStorage and GraphQL client)
+    setAuthToken(token)
 
     // Update the shared AuthViewModel state with the new auth status
     if (this.authViewModel) {
